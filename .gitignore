@@ -4,5 +4,6 @@
 exampleSite/.hugo_build.lock
 exampleSite/public/
 exampleSite/resources/
+exampleSite/content/
 
 node_modules/

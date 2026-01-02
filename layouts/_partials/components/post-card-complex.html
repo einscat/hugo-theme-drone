@@ -1,0 +1,32 @@
+<a href="{{ .RelPermalink }}" class="group relative block w-full">
+  <article class="bg-white/70 hover:bg-white border border-white/80 p-6 rounded-[24px] shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 backdrop-blur-md">
+    <div class="flex flex-col sm:flex-row gap-6 items-center sm:items-start">
+
+      {{ with .Params.cover }}
+      <div class="w-full sm:w-32 h-32 rounded-2xl overflow-hidden shrink-0 border border-black/5">
+        <img src="{{ . }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="">
+      </div>
+      {{ end }}
+
+      <div class="flex-1 min-w-0 w-full flex flex-col justify-center">
+        <div class="flex flex-wrap items-center gap-2 mb-3">
+          <span class="px-2 py-1 rounded-md bg-brand/5 text-xs font-bold text-brand font-mono shrink-0">
+            {{ .Date.Format "2006-01-02" }}
+          </span>
+          {{ with .Params.tags }}
+          <div class="flex flex-wrap gap-1">
+            {{ range first 3 . }}
+            <span class="text-xs text-secondary bg-white/50 px-1.5 py-0.5 rounded border border-white/50">#{{ . }}</span>
+            {{ end }}
+          </div>
+          {{ end }}
+        </div>
+
+        <h3 class="text-xl font-bold text-primary leading-snug group-hover:text-brand transition-colors">
+          {{ .Title }}
+        </h3>
+
+      </div>
+    </div>
+  </article>
+</a>
