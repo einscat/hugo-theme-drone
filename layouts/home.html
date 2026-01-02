@@ -1,15 +1,12 @@
 {{ define "main" }}
-<div class="relative w-full h-screen flex flex-col items-center justify-center gap-4">
-    <h1 class="text-4xl font-bold text-brand">
-        Tailwind v4 Setup Check
-    </h1>
+<div class="relative w-full h-screen overflow-hidden bg-bg">
 
-    <div class="card relative w-64 h-32 flex items-center justify-center">
-        <p class="text-primary">I am a Glassmorphism Card</p>
-    </div>
+    <div id="canvas-container" class="absolute inset-0 z-0"></div>
 
-    <div style="background-color: var(--color-brand-secondary);" class="w-16 h-16 rounded-full flex items-center justify-center text-white">
-        Variable
+    <div class="absolute left-1/2 top-1/2 z-10 w-0 h-0">
+
+        {{ partial "cards/hi.html" . }}
+
     </div>
 </div>
 {{ end }}
