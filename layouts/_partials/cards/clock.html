@@ -1,9 +1,13 @@
 {{ $layout := .Site.Data.layout.clockCard }}
 {{ $hiCard := .Site.Data.layout.hiCard }}
 {{ $site := .Site.Data.site }}
-{{ $spacing := 36 }}
+{{ $spacing := 24 }}
+
+{{/* 坐标计算 */}}
 {{ $left := add (div $hiCard.width 2) $spacing }}
-{{ $top := add (sub 0 $layout.offset) $spacing }}
+
+{{/* ✨ 位置修正: Top = -Offset(92) - Height(132) = -224px */}}
+{{ $top := sub (sub 0 $layout.offset) $layout.height }}
 
 <div
         class="card card-anim p-2"

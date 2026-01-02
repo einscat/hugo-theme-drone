@@ -1,0 +1,36 @@
+{{ $layout := .Site.Data.layout.calendarCard }}
+{{ $hiCard := .Site.Data.layout.hiCard }}
+{{ $clockCard := .Site.Data.layout.clockCard }}
+{{ $site := .Site.Data.site }}
+{{ $spacing := 24 }}
+
+{{/* 坐标计算 */}}
+{{ $left := add (div $hiCard.width 2) $spacing }}
+{{/* Top = -ClockOffset(92) + Spacing(24) = -68px */}}
+{{ $top := add (sub 0 $clockCard.offset) $spacing }}
+
+<div
+  class="card card-anim flex flex-col p-4"
+  style="
+        width: {{ $layout.width }}px;
+        height: {{ $layout.height }}px;
+        left: {{ $left }}px;
+        top: {{ $top }}px;
+        animation-delay: 0.5s;
+    "
+>
+  {{ if $site.enableChristmas }}
+  <img src="/images/christmas/snow-7.webp" class="absolute pointer-events-none opacity-80 w-[150px] -right-3 -top-3 z-10" />
+  {{ end }}
+
+  <h3 id="calendar-title" class="text-secondary text-sm font-medium pl-1">Loading...</h3>
+
+  <ul id="calendar-grid" class="calendar-grid text-secondary text-sm">
+  </ul>
+</div>
+
+{{ $calJs := resources.Get "js/calendar.js" }}
+{{ if $calJs }}
+{{ $calJs = $calJs | js.Build (dict "Minify" true) | resources.Fingerprint }}
+<script src="{{ $calJs.RelPermalink }}" defer></script>
+{{ end }}

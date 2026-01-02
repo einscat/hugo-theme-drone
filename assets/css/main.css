@@ -32,3 +32,52 @@
   from { opacity: 0; transform: translateY(20px) scale(0.9); }
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
+
+/* 日历 */
+@layer components {
+  /* 对应 React 中的 .bg-linear (今天的高亮背景) */
+  .bg-linear {
+    background: linear-gradient(135deg, var(--color-brand) 0%, var(--color-brand-secondary) 100%);
+    color: white !important;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    font-weight: 500;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  /* 星期高亮 (对应 isCurrentWeekday && 'text-brand') */
+  .text-brand-highlight {
+    color: var(--color-brand) !important;
+    font-weight: 600;
+  }
+
+  /* 日历网格布局 - 宽敞版 */
+  .calendar-grid {
+    display: grid !important;
+    grid-template-columns: repeat(7, 1fr) !important;
+    gap: 0.5rem; /* gap-2: 8px */
+    width: 100%;
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+
+    /* ✨ 关键：对应源码 h-[206px] 并增加顶部间距 */
+    margin-top: 12px !important; /* mt-3 */
+    height: 206px;
+    /* ✨ 关键：让行与行之间垂直撑开，解决“太紧凑”的问题 */
+    align-content: space-between;
+  }
+
+  /* 单元格样式 */
+  .calendar-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.5rem; /* rounded-lg */
+    font-size: 0.875rem; /* text-sm */
+    color: var(--color-secondary);
+
+    /* 填满格子，不强制正方形，利用每一像素宽度 */
+    width: 100%;
+    height: 100%;
+  }
+}
