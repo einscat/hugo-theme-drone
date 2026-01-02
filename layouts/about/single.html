@@ -1,6 +1,4 @@
 {{ define "main" }}
-{{ $css := resources.Get "css/about.css" | resources.Minify | resources.Fingerprint }}
-<link rel="stylesheet" href="{{ $css.RelPermalink }}">
 
 <div class="h-screen w-full bg-bg flex flex-col overflow-hidden">
 
