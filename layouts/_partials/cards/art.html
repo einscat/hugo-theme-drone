@@ -1,44 +1,23 @@
-{{/* 读取配置 */}}
-{{ $layout := .Site.Data.layout.artCard }}
-{{ $site := .Site.Data.site }}
+<!-- 假设配置已迁移至 hugo.toml 的 [params] 下 -->
+{{ $site := .Site.Params }}
 {{ $images := $site.artImages }}
 {{ $currentId := $site.currentArtImageId }}
-{{ $hiCard := .Site.Data.layout.hiCard }}
 
-{{/* 图片查找逻辑 */}}
+<!-- 图片查找逻辑 -->
 {{ $currentImage := index $images 0 }}
 {{ range $images }}
-{{ if eq .id $currentId }}
-{{ $currentImage = . }}
-{{ end }}
+  {{ if eq .id $currentId }}
+    {{ $currentImage = . }}
+  {{ end }}
 {{ end }}
 {{ $imgUrl := $currentImage.url | default "/images/art/cat.png" }}
 
-{{/* 定位计算 (保留为数据驱动) */}}
-{{ $spacing := 36 }}
-{{ $halfWidth := div $layout.width 2 }}
-{{ $left := sub 0 $halfWidth }}
-{{ $top := sub (sub (div $hiCard.height -2) $layout.height) $spacing }}
-
-<div
-  class="card card-anim p-2 group"
-  style="
-        width: {{ $layout.width }}px;
-        height: {{ $layout.height }}px;
-        left: {{ $left }}px;
-        top: {{ $top }}px;
-        animation-delay: 0.2s;
-    "
->
-  {{ if $site.enableChristmas }}
-  <img src="/images/christmas/snow-3.webp" alt="decoration" class="absolute pointer-events-none opacity-90 w-[160px] -right-2 -top-4 z-10" />
-  {{ end }}
-
+<div class="card card-art group">
   <div class="relative w-full h-full rounded-[24px] overflow-hidden cursor-pointer">
     <img
-      src="{{ $imgUrl }}"
-      alt="Art"
-      class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+            src="{{ $imgUrl }}"
+            alt="Art"
+            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
     >
     <div class="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300"></div>
   </div>

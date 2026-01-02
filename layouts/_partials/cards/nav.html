@@ -1,34 +1,17 @@
-{{ $layout := .Site.Data.layout.navCard }}
-{{ $hiCard := .Site.Data.layout.hiCard }}
-{{ $site := .Site.Data.site }}
-{{ $spacing := 36 }}
+{{/* 读取 hugo.toml 中的配置 */}}
+{{ $site := .Site.Params }}
 
-{{/* 坐标计算 */}}
-{{ $left := sub (sub (div $hiCard.width -2) $spacing) $layout.width }}
-{{ $top := sub (div $layout.height -2) 60 }}
+<div class="card card-nav">
 
-<div
-        class="card card-anim flex flex-col p-3"
-        style="
-        width: {{ $layout.width }}px;
-        height: {{ $layout.height }}px;
-        left: {{ $left }}px;
-        top: {{ $top }}px;
-        animation-delay: 0.4s;
-        display: flex;
-        flex-direction: column;
-    "
->
   <a href="/" class="flex items-center gap-3 mb-1 px-2 py-2 group">
-    <img
-            src="{{ $site.meta.logo | default "/images/avatar.png" }}"
+    <img src="{{ $site.meta.logo | default "/images/avatar.png" }}"
     alt="avatar"
     class="w-10 h-10 rounded-full object-cover transition-transform group-hover:scale-105"
     style="box-shadow: 0 12px 20px -5px #E2D9CE;"
     />
     <div class="flex flex-col items-start">
             <span class="font-averia text-2xl font-medium leading-none text-primary">
-                {{ $site.meta.title | default "YYsuni" }}
+                {{ $site.meta.title | default "活死人" }}
             </span>
       <span class="text-brand text-xs font-medium mt-1">虽千万里，吾往矣</span>
     </div>
@@ -38,17 +21,7 @@
 
   <nav id="nav-container" class="relative flex flex-col gap-2 w-full">
 
-    <div
-            id="nav-cursor"
-            class="absolute left-0 w-full rounded-full opacity-0 pointer-events-none z-0"
-            style="
-                height: 52px;
-                background-image: linear-gradient(to right bottom, var(--color-border) 60%, var(--color-card) 100%);
-                border: 1px solid rgba(255,255,255,0.2);
-                top: 0;
-                transition: transform 0.35s cubic-bezier(0.2, 0, 0.2, 1), opacity 0.2s ease;
-            "
-    ></div>
+    <div id="nav-cursor" class="nav-cursor"></div>
 
     {{ $items := slice
     (dict "href" "/notes"    "title" "笔记"     "icon" "scroll")
@@ -64,36 +37,28 @@
             href="{{ .href }}"
             class="nav-item relative z-10 flex items-center gap-3 w-full h-[52px] px-5 py-3 rounded-full group select-none transition-colors"
             data-index="{{ $index }}"
-            style="text-decoration: none;"
     >
       <div class="relative w-7 h-7 flex items-center justify-center shrink-0">
 
         <img
                 src="/svgs/{{ .icon }}-outline.svg"
-                class="nav-icon-outline absolute w-full h-full object-contain transition-opacity duration-300 opacity-60 group-hover:opacity-0"
+                class="nav-icon-outline absolute w-full h-full object-contain transition-opacity duration-300 opacity-60"
                 alt=""
         />
 
         <div
-                class="nav-icon-filled absolute w-full h-full bg-brand transition-opacity duration-300 opacity-0 group-hover:opacity-100"
-                style="-webkit-mask-image: url('/svgs/{{ .icon }}-filled.svg'); mask-image: url('/svgs/{{ .icon }}-filled.svg'); -webkit-mask-size: contain; mask-size: contain; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; -webkit-mask-position: center; mask-position: center;"
+                class="nav-icon-filled-base"
+                style="-webkit-mask-image: url('/svgs/{{ .icon }}-filled.svg'); mask-image: url('/svgs/{{ .icon }}-filled.svg');"
         ></div>
       </div>
 
-      <span class="nav-text text-base font-medium text-secondary group-hover:text-brand transition-colors">
+      <span class="nav-text text-base font-medium text-secondary transition-colors">
                 {{ .title }}
             </span>
     </a>
     {{ end }}
   </nav>
 </div>
-
-<style>
-  /* 当元素被 JS 加上 .nav-active 类时，强制应用高亮样式 */
-  .nav-item.nav-active .nav-icon-outline { opacity: 0 !important; }
-  .nav-item.nav-active .nav-icon-filled { opacity: 1 !important; }
-  .nav-item.nav-active .nav-text { color: var(--color-brand) !important; }
-</style>
 
 {{ $navJs := resources.Get "js/nav.js" }}
 {{ if $navJs }}

@@ -3,3 +3,8 @@ languageCode = 'en-US'
 title = 'My New Hugo Site'
 
 theme = 'hugo-theme-drone'
+
+[params.meta]
+  username = "Y"
+  avatar = "/images/avatar.png"
+  description = "活死人的行知路..."

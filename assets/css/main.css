@@ -35,6 +35,155 @@
 
 /* 日历 */
 @layer components {
+  /* HiCard 专用样式
+  尺寸: 360x288
+  定位: 基于父容器中心点 (0,0)，向左上偏移半宽半高来实现居中
+  Left: -180px, Top: -144px
+*/
+  .card-hi {
+    width: 360px;
+    height: 288px;
+    left: -180px;
+    top: -144px;
+
+    /* 动画设定 */
+    opacity: 0;
+    animation: fade-in-up 0.6s ease-out forwards;
+    animation-delay: 0.1s;
+
+    /* 基础布局 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    user-select: none;
+  }
+
+  /* 动画关键帧 (如果之前没定义过，请加上) */
+  @keyframes fade-in-up {
+    from { opacity: 0; transform: translateY(20px) scale(0.9); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  /* ArtCard 专用样式 */
+  .card-art {
+    width: 360px;
+    height: 200px;
+    left: -180px; /* -360 / 2 */
+    top: -380px;  /* -144(HiTop) - 36(Gap) - 200(Height) */
+    padding: 0.5rem; /* p-2 */
+
+    opacity: 0;
+    animation: fade-in-up 0.6s ease-out forwards;
+    animation-delay: 0.2s;
+  }
+
+  /* ClockCard 专用样式 */
+  .card-clock {
+    width: 232px;
+    height: 132px;
+    left: 204px;  /* 180 + 24 */
+    top: -224px;  /* -92 - 132 */
+    padding: 0.5rem; /* p-2 */
+
+    opacity: 0;
+    animation: fade-in-up 0.6s ease-out forwards;
+    animation-delay: 0.3s;
+  }
+
+  /* CalendarCard 专用样式 */
+  .card-calendar {
+    width: 350px;
+    height: 286px;
+    left: 204px; /* 180 + 24 */
+    top: -68px;  /* -92 + 24 */
+    padding: 1rem; /* p-4 */
+
+    /* Flex 布局 (用于标题和网格的纵向排列) */
+    display: flex;
+    flex-direction: column;
+
+    opacity: 0;
+    animation: fade-in-up 0.6s ease-out forwards;
+    animation-delay: 0.5s;
+  }
+
+  /* NavCard 专用样式 */
+  .card-nav {
+    width: 280px;
+    height: 468px;
+    left: -496px; /* -180(HiLeft) - 36(Gap) - 280(Width) */
+    top: -294px;  /* -(468/2) - 60(Shift) */
+    padding: 0.75rem; /* p-3 */
+
+    display: flex;
+    flex-direction: column;
+
+    opacity: 0;
+    animation: fade-in-up 0.6s ease-out forwards;
+    animation-delay: 0.4s;
+  }
+
+  /* 导航光标 (Pill) */
+  .nav-cursor {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 0;
+    width: 100%;
+    height: 52px;
+    border-radius: 9999px; /* rounded-full */
+    pointer-events: none;
+    opacity: 0;
+
+    /* 样式 */
+    background-image: linear-gradient(to right bottom, var(--color-border) 60%, var(--color-card) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+
+    /* 动画 */
+    transition: transform 0.35s cubic-bezier(0.2, 0, 0.2, 1), opacity 0.2s ease;
+  }
+
+  /* 导航项 */
+  .nav-item {
+    text-decoration: none !important; /* 强制移除下划线 */
+  }
+
+  /* 图标遮罩通用样式 (减少内联代码) */
+  .nav-icon-filled-base {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: var(--color-brand);
+    transition: opacity 0.3s;
+    opacity: 0;
+
+    /* 遮罩通用属性 */
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+  }
+
+  /* 交互状态：group-hover 或 active */
+  .group:hover .nav-icon-filled-base,
+  .nav-item.nav-active .nav-icon-filled-base {
+    opacity: 1 !important;
+  }
+
+  .group:hover .nav-icon-outline,
+  .nav-item.nav-active .nav-icon-outline {
+    opacity: 0 !important;
+  }
+
+  .group:hover .nav-text,
+  .nav-item.nav-active .nav-text {
+    color: var(--color-brand) !important;
+  }
+
   /* 对应 React 中的 .bg-linear (今天的高亮背景) */
   .bg-linear {
     background: linear-gradient(135deg, var(--color-brand) 0%, var(--color-brand-secondary) 100%);
