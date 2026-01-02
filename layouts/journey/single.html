@@ -1,5 +1,5 @@
 {{ define "main" }}
-{{ $css := resources.Get "css/journey.css" | resources.Minify | resources.Fingerprint }}
+{{ $css := resources.Get "css/projects.css" | resources.Minify | resources.Fingerprint }}
 <link rel="stylesheet" href="{{ $css.RelPermalink }}">
 
 <div class="h-screen w-full bg-bg flex flex-col overflow-hidden">
