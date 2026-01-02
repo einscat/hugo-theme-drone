@@ -1,7 +1,15 @@
 {{ define "main" }}
-  {{ .Content }}
-  {{ range site.RegularPages }}
-    <h2><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></h2>
-    {{ .Summary }}
-  {{ end }}
+<div class="relative w-full h-screen flex flex-col items-center justify-center gap-4">
+    <h1 class="text-4xl font-bold text-brand">
+        Tailwind v4 Setup Check
+    </h1>
+
+    <div class="card relative w-64 h-32 flex items-center justify-center">
+        <p class="text-primary">I am a Glassmorphism Card</p>
+    </div>
+
+    <div style="background-color: var(--color-brand-secondary);" class="w-16 h-16 rounded-full flex items-center justify-center text-white">
+        Variable
+    </div>
+</div>
 {{ end }}
