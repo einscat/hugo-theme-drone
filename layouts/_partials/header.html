@@ -1,5 +1,6 @@
 {{ $site := .Site.Params }}
 {{ $currentUrl := .RelPermalink }}
+{{ $currentSection := .Section }}
 
 <header class="relative mx-auto mt-5 w-[94%] max-w-[1100px] h-[68px] z-50
                flex items-center justify-between px-2 pl-6 pr-2
@@ -34,10 +35,27 @@
 
         {{ range .Site.Menus.main }}
 
-        {{/* 高亮逻辑 */}}
-        {{ $isPostsPage := and (in $currentUrl "/posts/") (eq .URL "/posts") }}
+        {{/* ✨✨ 全站智能高亮逻辑 ✨✨ */}}
+
+        {{/* 1. 精确匹配: 适用于首页或完全一致的路径 */}}
         {{ $isExact := eq $currentUrl .URL }}
-        {{ $isActive := or $isPostsPage $isExact }}
+
+        {{/* 2. 前缀匹配: 菜单是页面的父级 (排除根路径防止全站高亮) */}}
+        {{ $isPrefix := and (ne .URL "/") (hasPrefix $currentUrl .URL) }}
+
+        {{/* 3. Section 匹配: 只要属于同一个版块就高亮 */}}
+        {{/* 例如: 当前在 /reading/computing (Section="reading") */}}
+        {{/* 无论菜单是 /reading 还是 /reading/mine，只要它以 /reading 开头，就算匹配 */}}
+        {{ $isSectionMatch := false }}
+        {{ if and $currentSection (ne .URL "/") }}
+        {{ $sectionPath := printf "/%s" $currentSection }}
+        {{ if hasPrefix .URL $sectionPath }}
+        {{ $isSectionMatch = true }}
+        {{ end }}
+        {{ end }}
+
+        {{/* 最终激活状态 */}}
+        {{ $isActive := or $isExact $isPrefix $isSectionMatch }}
 
         <a href="{{ .URL }}"
            class="header-nav-item relative z-10 flex items-center gap-2 px-5 py-2.5 rounded-full transition-colors duration-300 group select-none whitespace-nowrap bg-transparent"
@@ -101,6 +119,7 @@
                 const outline = item.querySelector('.header-icon-outline');
                 const filled = item.querySelector('.header-icon-filled');
                 const text = item.querySelector('.header-nav-text');
+
                 const showActiveState = isHovered || (!hoverItem && isActiveOriginal);
 
                 if (showActiveState) {

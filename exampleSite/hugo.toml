@@ -27,8 +27,8 @@ theme = 'hugo-theme-drone'
   name = "行知路"
   title = "行知路"
   weight = 4
-  identifier = "journey"
-  url = "/journey"
+  identifier = "moments"
+  url = "/journey/moments"
   params = { icon = "website" }
 [[menu.main]]
   name = "我的项目"
@@ -51,3 +51,8 @@ theme = 'hugo-theme-drone'
   identifier = "about"
   url = "/about"
   params = { icon = "about" }
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true

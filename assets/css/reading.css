@@ -1,0 +1,317 @@
+/* =========================================
+   1. 通用样式 & 滚动条隐藏
+   ========================================= */
+/* 隐藏滚动条 */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none;    /* Firefox */
+}
+
+/* =========================================
+   2. 顶部固定区域样式 (导航 + 分割线 + 引用)
+   ========================================= */
+
+/* 顶部固定容器 (用于包裹子导航、分割线和引用) */
+.reading-fixed-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 10px; /* 底部稍微留一点空隙 */
+  width: 100%;
+}
+
+/* (A) 子导航 (我的 · 心理学...) */
+.reading-sub-nav {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.8rem; /* 间距紧凑 */
+  font-size: 1rem;
+  color: #c05b4d;
+  margin-bottom: 0.5rem; /* 紧凑：下方留白减小 */
+}
+
+.reading-sub-nav a {
+  text-decoration: none;
+  color: #c05b4d;
+  font-weight: bold;
+  opacity: 0.7; /* 默认稍微淡一点 */
+  transition: opacity 0.2s;
+  position: relative;
+}
+
+/* 选中高亮 & 悬停 */
+.reading-sub-nav a:hover,
+.reading-sub-nav a.active {
+  opacity: 1;
+  text-decoration: none !important;
+}
+
+/* 分隔点样式 */
+.reading-sub-nav .separator {
+  opacity: 0.5;
+  font-weight: normal;
+}
+
+/* (B) 虚线分割线 */
+.reading-divider {
+  width: 100%;
+  border: 0;
+  /* ✨ 需求：虚线，颜色 #c05b4d */
+  border-bottom: 2px dashed #c05b4d;
+  opacity: 0.5;
+  margin: 0.5rem 0; /* 紧凑：上下间距极小 */
+}
+
+/* (C) 引用块 (Reading - 读书破万卷) */
+.reading-quote {
+  width: 100%;
+  border-left: 4px solid #c05b4d;
+
+  /* ✨ 需求：背景色 5% 透明度 */
+  background-color: rgba(192, 91, 77, 0.05);
+
+  /* ✨ 需求：高度紧凑 */
+  padding: 4px 16px;
+
+  border-radius: 4px;
+  margin: 0; /* 移除外边距，紧贴上方虚线 */
+
+  font-style: italic;
+  font-size: 1.05rem;
+
+  /* ✨ 需求：垂直居中 */
+  display: flex;
+  align-items: center;
+  min-height: 36px; /* 设定一个极小的最小高度 */
+
+  /* 引用文字颜色 */
+  color: rgba(52, 73, 94, 0.8) !important;
+}
+
+/* ✨ 关键：移除引用块内 P 标签的所有边距，防止文字偏上 */
+.reading-quote p {
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1.4;
+}
+
+/* =========================================
+   3. 下方滚动内容区域样式
+   ========================================= */
+.reading-scroll-area {
+  padding-top: 20px; /* 内容与顶部固定区域保持距离 */
+}
+
+/* Markdown 正文内容排版修正 */
+.reading-content h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #c05b4d;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-family: var(--font-averia);
+}
+
+.reading-content h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #4E3F42;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  border-left: 4px solid #c05b4d;
+  padding-left: 12px;
+}
+
+.reading-content p {
+  color: #4E3F42;
+  margin-bottom: 1rem;
+  line-height: 1.7;
+  opacity: 0.9;
+}
+
+/* 正文链接样式 (不影响顶部导航) */
+.reading-content a:not(.book-description a):not(.reading-sub-nav a) {
+  color: #c05b4d;
+  text-decoration: none;
+  border-bottom: 1px dashed #c05b4d;
+  transition: all 0.2s;
+}
+.reading-content a:not(.book-description a):not(.reading-sub-nav a):hover {
+  border-bottom-style: solid;
+}
+
+/* =========================================
+   4. 视图 A: 列表模式 (.book-list)
+   ========================================= */
+.book-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.book-list .book-item {
+  display: flex;
+  align-items: flex-start;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  padding: 16px;
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.book-list .book-item:hover {
+  background: rgba(255, 255, 255, 0.9);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(192, 91, 77, 0.1);
+}
+
+.book-list .book-cover {
+  flex-shrink: 0;
+  width: 100px;
+  height: 140px;
+  object-fit: contain;
+  border-radius: 8px;
+  margin-right: 20px;
+  background-color: #fff;
+  padding: 4px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.book-list .book-details {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ✨ 需求：书名深色 #4E3F42 */
+.book-list .book-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #4E3F42 !important;
+  margin: 0 0 8px 0;
+}
+
+.book-list .book-meta {
+  font-size: 0.875rem;
+  color: rgba(52, 73, 94, 0.7);
+  margin-bottom: 8px;
+}
+
+.book-list .book-rating {
+  font-size: 0.875rem;
+  color: #f59e0b;
+  margin-bottom: 8px;
+}
+
+.book-list .book-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.book-list .book-tags span {
+  font-size: 0.75rem;
+  color: rgba(52, 73, 94, 0.7);
+  background-color: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 4px;
+  padding: 2px 8px;
+}
+
+.book-list .book-description {
+  font-size: 0.9rem;
+  color: #4E3F42;
+  opacity: 0.8;
+  line-height: 1.6;
+}
+
+/* =========================================
+   5. 视图 B: 书架模式 (.bookshelf)
+   ========================================= */
+.bookshelf {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 24px 16px;
+  padding: 30px;
+  background: rgba(244, 244, 244, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 24px;
+  position: relative;
+  backdrop-filter: blur(8px);
+}
+
+.bookshelf-row {
+  display: contents;
+}
+
+.bookshelf .book-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: transparent;
+  padding: 0;
+  transition: transform 0.3s ease;
+  position: relative;
+}
+
+.bookshelf .book-item:hover {
+  transform: translateY(-8px) scale(1.02);
+  z-index: 10;
+}
+
+.bookshelf .book-cover {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  border-radius: 6px;
+  margin-bottom: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1), inset 0 0 0 1px rgba(255,255,255,0.2);
+  transition: box-shadow 0.3s;
+}
+
+.bookshelf .book-item:hover .book-cover {
+  box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+}
+
+/* ✨ 需求：书名深色 #4E3F42 */
+.bookshelf .book-title {
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: #4E3F42 !important;
+  margin: 0 0 4px;
+  text-align: center;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.bookshelf .book-meta {
+  font-size: 0.75rem;
+  color: rgba(52, 73, 94, 0.7);
+  text-align: center;
+}
+
+.bookshelf .book-description a {
+  display: inline-block;
+  margin-top: 6px;
+  font-size: 0.75rem;
+  color: #c05b4d;
+  text-decoration: none;
+  border: 1px solid #c05b4d;
+  padding: 2px 8px;
+  border-radius: 99px;
+  transition: all 0.2s;
+}
+.bookshelf .book-description a:hover {
+  background: #c05b4d;
+  color: white;
+}
