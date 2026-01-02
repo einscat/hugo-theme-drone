@@ -1,0 +1,42 @@
+{{ $layout := .Site.Data.layout.clockCard }}
+{{ $hiCard := .Site.Data.layout.hiCard }}
+{{ $site := .Site.Data.site }}
+{{ $spacing := 36 }}
+{{ $left := add (div $hiCard.width 2) $spacing }}
+{{ $top := add (sub 0 $layout.offset) $spacing }}
+
+<div
+        class="card card-anim p-2"
+        style="
+        width: {{ $layout.width }}px;
+        height: {{ $layout.height }}px;
+        left: {{ $left }}px;
+        top: {{ $top }}px;
+        animation-delay: 0.3s;
+    "
+>
+  {{ if $site.enableChristmas }}
+  <img src="/images/christmas/snow-5.webp" class="absolute pointer-events-none opacity-60 w-[60px] left-0.5 bottom-0.5" />
+  <img src="/images/christmas/snow-6.webp" class="absolute pointer-events-none opacity-60 w-[80px] -right-1 -top-2.5" />
+  {{ end }}
+
+  <div class="bg-secondary/20 rounded-[32px] flex h-full w-full cursor-pointer items-center justify-center gap-1.5 p-2 shadow-inner">
+    {{ partial "svg/digit.html" (dict "id" "clock-h1") }}
+    {{ partial "svg/digit.html" (dict "id" "clock-h2") }}
+
+    <div class="flex flex-col justify-center gap-2 h-[32px] sm:h-[52px]">
+      <div class="bg-primary h-1.5 w-1.5 rounded-full"></div>
+      <div class="bg-primary h-1.5 w-1.5 rounded-full"></div>
+    </div>
+
+    {{ partial "svg/digit.html" (dict "id" "clock-m1") }}
+    {{ partial "svg/digit.html" (dict "id" "clock-m2") }}
+
+    <div class="flex flex-col justify-center gap-2 h-[32px] sm:h-[52px]">
+      <div class="bg-primary h-1.5 w-1.5 rounded-full"></div>
+      <div class="bg-primary h-1.5 w-1.5 rounded-full"></div>
+    </div>
+    {{ partial "svg/digit.html" (dict "id" "clock-s1") }}
+    {{ partial "svg/digit.html" (dict "id" "clock-s2") }}
+  </div>
+</div>
