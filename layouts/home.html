@@ -8,10 +8,11 @@
         {{ partial "cards/hi.html" . }}
         {{ partial "cards/clock.html" . }}
         {{ partial "cards/art.html" . }}
+        {{ partial "cards/nav.html" . }}
 
     </div>
 </div>
 
-{{ $clockJs := resources.Get "js/clock.js" | resources.Minify | resources.Fingerprint }}
+{{ $clockJs := resources.Get "js/clock.js" | js.Build (dict "Minify" true) | resources.Fingerprint }}
 <script src="{{ $clockJs.RelPermalink }}" defer></script>
 {{ end }}

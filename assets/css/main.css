@@ -1,117 +1,34 @@
 @import "tailwindcss";
 
-/* 1. 迁移自 theme.css
-  Tailwind v4 允许直接在 @theme 块中定义变量，
-  或者像下面这样在 :root 中定义原生 CSS 变量，Tailwind v4 会自动识别它们。
-*/
 @theme {
-  /* 定义字体变量映射 */
   --font-averia: 'Averia Gruesa Libre', sans-serif;
-  --font-sans: 'PingFang SC', -apple-system, system-ui, 'Segoe UI', Roboto, Ubuntu, Cantarell, 'Noto Sans', sans-serif, BlinkMacSystemFont, 'Helvetica Neue', 'Hiragino Sans GB', 'Microsoft YaHei', Arial;
+  --font-sans: 'PingFang SC', -apple-system, system-ui, sans-serif;
 
-  /* 定义颜色变量映射
-     注意：在 v4 中，如果你想使用 class="text-brand"，
-     你需要确保 --color-brand 被正确识别。
-  */
-  --color-primary: #334f52;
+  /* 来自 site-content.json 的默认值 */
+  --color-brand: #de4331;
+  --color-brand-secondary: #FCC841;
+  --color-primary: #4E3F42;
   --color-secondary: #7b888e;
-  --color-brand: #35bfab;
-  --color-brand-secondary: #1fc9e7;
   --color-bg: #eeeeee;
-  --color-border: #fff;
+
+  /* 导航栏光标必须的变量 */
+  --color-border: #ffffff;
   --color-card: #ffffff66;
-  --color-article: #ffffffcc;
 }
 
-/* 2. 迁移自 theme.css 的变量定义 (为了确保原生 CSS 变量可用)
-*/
-:root {
-  --color-primary: #334f52;
-  --color-secondary: #7b888e;
-  --color-brand: #35bfab;
-  --color-brand-secondary: #1fc9e7;
-  --color-bg: #eeeeee;
-  --color-border: #fff;
-  --color-card: #ffffff66;
-  --color-article: #ffffffcc;
-}
-
-/* 3. 迁移自 globals.css
-*/
-
-/* 引入 tailwind-animate 插件 (v4内置或通过插件支持，暂时保留原逻辑，如果报错可能需要移除插件行) */
-/* @plugin 'tailwindcss-animate';  <-- 先注释掉，防止没有安装此插件导致报错，后续再加 */
-
-@utility scrollbar-none {
-  scrollbar-width: none;
-  &::-webkit-scrollbar {
-    display: none;
-  }
-}
-
-@layer base {
-  html {
-    /* 使用 @apply 引用我们在 @theme 中定义的变量 */
-    @apply text-primary bg-bg h-full leading-tight;
-    scroll-behavior: smooth;
-  }
-
-  body {
-    @apply h-full bg-none;
-  }
-
-  * {
-    @apply border-border;
-  }
-
-  input:focus,
-  textarea:focus {
-    outline: none;
-  }
-
-  button {
-    @apply cursor-pointer;
-  }
-
-  /* 保留原有的 range-track 等样式，暂时不改动，
-     后续做音乐播放器卡片时会用到。
-  */
-}
-
-/* 自定义的卡片 Utility 类
-  迁移自 globals.css 中的 @utility card
-*/
 @utility card {
-  @apply bg-card absolute rounded-[40px] border p-6;
-  box-shadow:
-          0 40px 50px -32px rgba(0, 0, 0, 0.05),
-          inset 0 0 20 rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(4px);
-
-  @supports (corner-shape: squircle) {
-    corner-shape: squircle;
-    @apply rounded-[64px];
-  }
+  /* 对应 React 的 backdrop-blur-xl 等效果 */
+  @apply bg-card absolute rounded-[40px] border border-white/60;
+  box-shadow: 0 40px 50px -32px rgba(0, 0, 0, 0.05), inset 0 0 20px rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(12px);
 }
 
-@utility font-averia {
-  font-family: var(--font-averia);
-}
-
-/* 添加到 assets/css/main.css */
-@layer components {
-  .card-anim {
-    @apply opacity-0;
-    animation: fade-in-up 0.6s ease-out forwards;
-  }
+@utility card-anim {
+  opacity: 0;
+  animation: fade-in-up 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
 
 @keyframes fade-in-up {
   from { opacity: 0; transform: translateY(20px) scale(0.9); }
   to { opacity: 1; transform: translateY(0) scale(1); }
-}
-
-/* 确保 .fill-primary 能够正常工作，如果 Tailwind 没有自动推断 */
-@utility fill-primary {
-  fill: var(--color-primary);
 }
