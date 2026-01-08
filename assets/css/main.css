@@ -234,16 +234,94 @@
     width: 100%;
 }
 
-/* 代码块 */
-.code-block-wrapper { margin: 1.5em 0; border-radius: 8px; overflow: hidden; background-color: #f8f8f8; border: 1px solid rgba(0, 0, 0, 0.05); }
-.code-block-header { display: flex; justify-content: space-between; align-items: center; padding: 6px 12px; background-color: #e5e7eb; border-bottom: 1px solid rgba(0, 0, 0, 0.05); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 0.75rem; color: #555; user-select: none; }
-/* 覆盖 Typography 插件对 pre 的默认 margin，因为外层有 wrapper 了 */
+/* =========================================
+   代码块终极修复版 (防误触复制 + 极简风)
+   ========================================= */
+
+/* 1. 彻底隐藏 Tailwind 自带的反引号(斑点) */
+.layout-content :where(code)::before,
+.layout-content :where(code)::after {
+    content: none !important;
+    display: none;
+}
+
+/* 2. 外层容器：去掉花哨背景，使用细边框 */
+.code-block-wrapper {
+    margin: 1.2em 0;
+    border: 1px solid #e1e4e8; /* 极淡的灰边框 */
+    border-radius: 6px;
+    overflow: hidden;
+    background-color: #fff;    /* 纯白背景，最干净 */
+}
+
+/* 3. 头部工具栏：关键修改 */
+.code-block-header {
+    display: flex;
+    align-items: center;
+    padding: 6px 12px;
+    background-color: #fafbfc; /* 极淡的灰背景区分头部 */
+    border-bottom: 1px solid #e1e4e8;
+
+    /* === 关键：禁止选中头部文字 === */
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none;    /* Firefox */
+    -ms-user-select: none;     /* IE10+/Edge */
+    user-select: none;         /* Standard */
+}
+
+/* 语言标记 */
+.code-block-header span {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #586069;
+}
+
+/* 复制按钮 */
+.code-copy-btn {
+    margin-left: auto;
+    border: 1px solid rgba(27, 31, 35, 0.15);
+    background-color: #fafbfc;
+    color: #24292e;
+    cursor: pointer;
+    padding: 2px 8px;
+    font-size: 0.7rem;
+    border-radius: 4px;
+    transition: all 0.2s;
+    font-weight: 500;
+    box-shadow: 0 1px 0 rgba(27,31,35,0.04);
+}
+
+.code-copy-btn:hover {
+    background-color: #f3f4f6;
+    border-color: rgba(27, 31, 35, 0.15);
+}
+
+.code-copy-btn:active {
+    background-color: #edeff2;
+    box-shadow: inset 0 1px 0 rgba(225,228,232,0.2);
+}
+
+/* 4. 代码正文 */
 .layout-content pre {
     margin: 0 !important;
+    padding: 12px !important;
     border-radius: 0 !important;
+    background-color: transparent !important;
+    color: #24292e !important;
+    font-family: "JetBrains Mono", Consolas, Menlo, monospace; /* 优质字体栈 */
+    font-size: 0.875rem;
+    line-height: 1.5;
+    overflow-x: auto;
 }
-.code-copy-btn { background: transparent; border: 1px solid rgba(0,0,0,0.1); color: #666; cursor: pointer; padding: 3px 8px; border-radius: 4px; font-size: 0.7rem; transition: all 0.2s; display: flex; align-items: center; gap: 4px; }
-.code-copy-btn:hover { background-color: rgba(0,0,0,0.1); }
+
+/* 确保 code 标签无额外样式 */
+.layout-content pre code {
+    background-color: transparent !important;
+    color: inherit !important;
+    padding: 0 !important;
+    font-weight: 400 !important;
+}
 
 /* 侧边栏 (Article Sidebar) */
 .article-sidebar { display: none; }
