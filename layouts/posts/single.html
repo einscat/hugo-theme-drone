@@ -8,37 +8,33 @@
 
   <div class="flex-1 w-full flex flex-col overflow-hidden">
 
-    <div class="flex-none z-40 w-full flex justify-center bg-bg/95 backdrop-blur-sm">
-      <div class="w-full max-w-5xl px-4 sm:px-8 layout-fixed-header">
-
-        <h1 class="article-fixed-title">{{ .Title }}</h1>
-
-        <hr class="layout-divider">
-
-        <div class="article-fixed-meta">
-          <div class="meta-left">
-            <span style="opacity: 0.7;">📅</span>
-            <time>{{ .Date.Format "2006-01-02" }}</time>
-            <span class="mx-2 opacity-30">|</span>
-            <span style="opacity: 0.7;">📝</span>
-            <span>{{ .WordCount }} 字</span>
-          </div>
-
-          {{ if .Params.tags }}
-          <div class="meta-tags">
-            {{ range .Params.tags }}
-            <span class="meta-tag">#{{ . }}</span>
-            {{ end }}
-          </div>
-          {{ end }}
-        </div>
-
-      </div>
-    </div>
-
     <div class="flex-1 w-full overflow-y-auto no-scrollbar scroll-smooth" id="scroll-container">
 
       <div class="article-container pt-8 pb-24">
+
+        <header class="w-full flex flex-col items-center mb-4 layout-fixed-header">
+          <h1 class="article-fixed-title">{{ .Title }}</h1>
+
+          <hr class="layout-divider">
+
+          <div class="article-fixed-meta">
+            <div class="meta-left">
+              <span style="opacity: 0.7;">📅</span>
+              <time>{{ .Date.Format "2006-01-02" }}</time>
+              <span class="mx-2 opacity-30">|</span>
+              <span style="opacity: 0.7;">📝</span>
+              <span>{{ .WordCount }} 字</span>
+            </div>
+
+            {{ if .Params.tags }}
+            <div class="meta-tags">
+              {{ range .Params.tags }}
+              <span class="meta-tag">#{{ . }}</span>
+              {{ end }}
+            </div>
+            {{ end }}
+          </div>
+        </header>
 
         <main class="article-main">
           <article class="article-card animate-fade-in-up">
@@ -65,10 +61,11 @@
 </div>
 
 <script>
+  // 保持原有 Script 不变
   document.addEventListener('DOMContentLoaded', function() {
     const scrollContainer = document.getElementById('scroll-container');
 
-    // 代码块复制
+    // 代码块复制逻辑 (不变)
     document.querySelectorAll('pre').forEach((pre) => {
       let lang = 'TEXT';
       const code = pre.querySelector('code');
@@ -95,16 +92,14 @@
       });
     });
 
-    // 目录高亮
+    // 目录高亮逻辑 (不变)
     const tocLinks = document.querySelectorAll('.sidebar-toc a');
-    // 建议去掉 h1，因为正文中通常只从 h2 开始，且 h1 往往是文章大标题不需要在侧边栏高亮
     const headings = document.querySelectorAll('.layout-content h2, .layout-content h3, .layout-content h4');
-
 
     if (tocLinks.length > 0 && headings.length > 0) {
       const observerOptions = {
         root: scrollContainer,
-        rootMargin: '-100px 0px -70% 0px',
+        rootMargin: '-100px 0px -70% 0px', // 调整了视口检测区域，适应滚动标题
         threshold: 0
       };
 
