@@ -1,23 +1,63 @@
- {{- /*
-For a given taxonomy, renders a list of terms assigned to the page.
-
-@context {page} page The current page.
-@context {string} taxonomy The taxonomy.
-
-@example: {{ partial "terms.html" (dict "taxonomy" "tags" "page" .) }}
+{{/* 接收参数:
+- context: 全局上下文 (.)
+- data: 分类或标签的数据对象 (.Site.Taxonomies.categories 或 .tags)
+- type: 字符串 "category" 或 "tags" (用于判断图标和链接)
 */}}
 
-{{- $page := .page }}
-{{- $taxonomy := .taxonomy }}
+{{ $data := .data }}
+{{ $type := .type }}
 
-{{- with $page.GetTerms $taxonomy }}
-  {{- $label := (index . 0).Parent.LinkTitle }}
-  <div>
-    <div>{{ $label }}:</div>
-    <ul>
-      {{- range . }}
-        <li><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></li>
-      {{- end }}
+{{ if $data }}
+<div class="masonry-container">
+  {{ range $name, $taxonomy := $data }}
+  <div class="masonry-item bg-white/40 border border-white/60 rounded-[1.5rem] p-5 backdrop-blur-sm transition-all hover:bg-white/60 hover:shadow-lg hover:-translate-y-1 group cursor-pointer relative overflow-hidden">
+
+    <div class="flex items-center justify-between mb-4 pb-3 border-b border-black/5 relative z-10">
+      <h3 class="text-xl font-bold text-primary flex items-center gap-2 group-hover:text-brand transition-colors">
+        {{ if eq $type "category" }}
+        <span class="text-brand opacity-60">#</span>
+        {{ else }}
+        <span class="text-brand opacity-60">🏷</span>
+        {{ end }}
+        {{ $name }}
+      </h3>
+      <span class="text-xs font-bold bg-white px-2.5 py-1 rounded-full text-secondary shadow-sm">{{ len $taxonomy }}</span>
+    </div>
+
+    <ul class="space-y-2 relative z-10">
+      {{ range first 5 $taxonomy.Pages }}
+      <li>
+        <a href="{{ .RelPermalink }}" class="block p-2 -mx-2 rounded-lg hover:bg-white/50 transition-colors group/item">
+          <div class="flex items-center justify-between gap-2">
+            <span class="text-sm font-medium text-primary/80 group-hover/item:text-brand truncate">{{ .Title }}</span>
+            {{ if eq $type "category" }}
+            <span class="text-[10px] text-secondary/40 font-mono shrink-0">{{ .Date.Format "01-02" }}</span>
+            {{ end }}
+          </div>
+        </a>
+      </li>
+      {{ end }}
+
+      {{ if gt (len $taxonomy.Pages) 5 }}
+      <li class="pt-2">
+        {{/* 构建链接：根据类型跳转到 /categories/name 或 /tags/name */}}
+        <a href="{{ "/" | relLangURL }}{{ if eq $type "category" }}categories{{ else }}tags{{ end }}/{{ $name | urlize }}" class="text-xs text-secondary hover:text-brand font-medium flex items-center gap-1">
+        查看全部...
+        </a>
+      </li>
+      {{ end }}
     </ul>
+
+    {{ if eq $type "category" }}
+    <div class="absolute -right-4 -bottom-4 text-brand/5 rotate-12 pointer-events-none">
+      <svg class="w-24 h-24" fill="currentColor" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+    </div>
+    {{ end }}
   </div>
-{{- end }}
+  {{ end }}
+</div>
+{{ else }}
+<div class="text-center py-20 text-secondary border-2 border-dashed border-black/5 rounded-3xl">
+  暂无{{ if eq $type "category" }}分类{{ else }}标签{{ end }}数据
+</div>
+{{ end }}

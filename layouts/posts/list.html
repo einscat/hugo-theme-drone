@@ -7,13 +7,9 @@
     </div>
 
     <div class="flex-1 w-full relative overflow-hidden">
-
         <div class="absolute inset-0 pointer-events-none z-40 flex justify-center">
-
             <div class="w-full max-w-5xl h-full relative px-4 sm:px-8">
-
                 <div class="hidden md:flex absolute left-4 sm:left-6 top-0 h-full w-16 flex-col justify-center items-center">
-
                     <aside class="flex flex-col items-center gap-2 p-2 rounded-full
                         bg-white/60 border border-white/60 backdrop-blur-xl
                         shadow-[0_8px_30px_rgba(0,0,0,0.04)] transition-all relative pointer-events-auto"
@@ -25,40 +21,70 @@
                         box-shadow: 0 4px 10px rgba(0,0,0,0.1), inset 0 0 0 1px rgba(255,255,255,0.6);">
                         </div>
 
-                        <button onclick="switchView('year', this)" class="side-tab active group relative z-10" title="年">
+                        <button onclick="switchView('year', this)" class="side-tab active group relative z-10"
+                                title="年">
                             <span class="font-averia font-bold text-sm transition-colors duration-300">Year</span>
                         </button>
                         <div class="w-6 h-px bg-black/5 my-1"></div>
-                        <button onclick="switchView('category', this)" class="side-tab group relative z-10" title="分类">
-                            <svg class="w-5 h-5 transition-colors duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                        <button onclick="switchView('category', this)" class="side-tab group relative z-10"
+                                title="分类">
+                            <svg class="w-5 h-5 transition-colors duration-300" viewBox="0 0 24 24" fill="none"
+                                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="3" width="7" height="7"></rect>
+                                <rect x="14" y="3" width="7" height="7"></rect>
+                                <rect x="14" y="14" width="7" height="7"></rect>
+                                <rect x="3" y="14" width="7" height="7"></rect>
+                            </svg>
                         </button>
                         <button onclick="switchView('tags', this)" class="side-tab group relative z-10" title="标签">
-                            <svg class="w-5 h-5 transition-colors duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+                            <svg class="w-5 h-5 transition-colors duration-300" viewBox="0 0 24 24" fill="none"
+                                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                                <line x1="7" y1="7" x2="7.01" y2="7"></line>
+                            </svg>
                         </button>
                         <button onclick="switchView('search', this)" class="side-tab group relative z-10" title="搜索">
-                            <svg class="w-5 h-5 transition-colors duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                            <svg class="w-5 h-5 transition-colors duration-300" viewBox="0 0 24 24" fill="none"
+                                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
                         </button>
                     </aside>
                 </div>
             </div>
         </div>
 
-        <div id="scroll-container" class="absolute inset-0 w-full h-full overflow-y-auto no-scrollbar scroll-smooth pt-2 pb-24">
-
+        <div id="scroll-container"
+             class="absolute inset-0 w-full h-full overflow-y-auto no-scrollbar scroll-smooth pt-2 pb-24">
             <div class="md:hidden sticky top-0 z-30 flex justify-center pb-6 pointer-events-none">
                 <div class="inline-flex items-center p-1.5 bg-white/80 rounded-full backdrop-blur-xl border border-white/50 shadow-sm pointer-events-auto">
                     <button onclick="switchView('year', this)" class="mobile-tab active">Year</button>
                     <div class="w-px h-3 bg-black/10 mx-2"></div>
-                    <button onclick="switchView('category', this)" class="mobile-tab px-3"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg></button>
-                    <button onclick="switchView('tags', this)" class="mobile-tab px-3"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path></svg></button>
-                    <button onclick="switchView('search', this)" class="mobile-tab px-3"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></button>
+                    <button onclick="switchView('category', this)" class="mobile-tab px-3">
+                        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="14" width="7" height="7"></rect>
+                            <rect x="3" y="14" width="7" height="7"></rect>
+                        </svg>
+                    </button>
+                    <button onclick="switchView('tags', this)" class="mobile-tab px-3">
+                        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                        </svg>
+                    </button>
+                    <button onclick="switchView('search', this)" class="mobile-tab px-3">
+                        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                    </button>
                 </div>
             </div>
 
             <div class="w-full max-w-5xl mx-auto px-4 sm:px-8 md:pl-24">
-
                 <div id="archive-views" class="relative min-h-[400px]">
-
                     <div id="view-year" class="view-section">
                         <div class="grid gap-10">
                             {{ range .Pages.GroupByDate "2006" }}
@@ -79,66 +105,11 @@
                     </div>
 
                     <div id="view-category" class="view-section hidden">
-                        {{ if .Site.Taxonomies.categories }}
-                        <div class="masonry-container">
-                            {{ range $name, $taxonomy := .Site.Taxonomies.categories }}
-                            <div class="masonry-item bg-white/40 border border-white/60 rounded-[1.5rem] p-5 backdrop-blur-sm transition-all hover:bg-white/60 hover:shadow-lg hover:-translate-y-1 group cursor-pointer relative overflow-hidden">
-                                <div class="flex items-center justify-between mb-4 pb-3 border-b border-black/5 relative z-10">
-                                    <h3 class="text-xl font-bold text-primary flex items-center gap-2 group-hover:text-brand transition-colors">
-                                        <span class="text-brand opacity-60">#</span> {{ $name }}
-                                    </h3>
-                                    <span class="text-xs font-bold bg-white px-2.5 py-1 rounded-full text-secondary shadow-sm">{{ len $taxonomy }}</span>
-                                </div>
-                                <ul class="space-y-2 relative z-10">
-                                    {{ range first 5 $taxonomy.Pages }}
-                                    <li>
-                                        <a href="{{ .RelPermalink }}" class="block p-2 -mx-2 rounded-lg hover:bg-white/50 transition-colors group/item">
-                                            <div class="flex items-center justify-between gap-2">
-                                                <span class="text-sm font-medium text-primary/80 group-hover/item:text-brand truncate">{{ .Title }}</span>
-                                                <span class="text-[10px] text-secondary/40 font-mono shrink-0">{{ .Date.Format "01-02" }}</span>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    {{ end }}
-                                    {{ if gt (len $taxonomy.Pages) 5 }}
-                                    <li class="pt-2">
-                                        <a href="{{ "/" | relLangURL }}categories/{{ $name | urlize }}" class="text-xs text-secondary hover:text-brand font-medium flex items-center gap-1">查看全部...</a>
-                                    </li>
-                                    {{ end }}
-                                </ul>
-                                <div class="absolute -right-4 -bottom-4 text-brand/5 rotate-12 pointer-events-none">
-                                    <svg class="w-24 h-24" fill="currentColor" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-                                </div>
-                            </div>
-                            {{ end }}
-                        </div>
-                        {{ else }}<div class="text-center py-20 text-secondary border-2 border-dashed border-black/5 rounded-3xl">暂无分类数据</div>{{ end }}
+                        {{ partial "terms.html" (dict "context" . "data" .Site.Taxonomies.categories "type" "category") }}
                     </div>
 
                     <div id="view-tags" class="view-section hidden">
-                        {{ if .Site.Taxonomies.tags }}
-                        <div class="masonry-container">
-                            {{ range $name, $taxonomy := .Site.Taxonomies.tags }}
-                            <div class="masonry-item bg-white/40 border border-white/60 rounded-[1.5rem] p-5 backdrop-blur-sm transition-all hover:bg-white/60 hover:shadow-lg hover:-translate-y-1 group cursor-pointer relative overflow-hidden">
-                                <div class="flex items-center justify-between mb-4 pb-3 border-b border-black/5 relative z-10">
-                                    <h3 class="text-lg font-bold text-primary flex items-center gap-2 group-hover:text-brand transition-colors">
-                                        <span class="text-brand opacity-60">🏷</span> {{ $name }}
-                                    </h3>
-                                    <span class="text-xs font-bold bg-white px-2.5 py-1 rounded-full text-secondary shadow-sm">{{ len $taxonomy }}</span>
-                                </div>
-                                <ul class="space-y-2 relative z-10">
-                                    {{ range first 5 $taxonomy.Pages }}
-                                    <li>
-                                        <a href="{{ .RelPermalink }}" class="block p-2 -mx-2 rounded-lg hover:bg-white/50 transition-colors group/item">
-                                            <span class="text-sm font-medium text-primary/80 group-hover/item:text-brand truncate block">{{ .Title }}</span>
-                                        </a>
-                                    </li>
-                                    {{ end }}
-                                </ul>
-                            </div>
-                            {{ end }}
-                        </div>
-                        {{ else }}<div class="text-center py-20 text-secondary border-2 border-dashed border-black/5 rounded-3xl">暂无标签数据</div>{{ end }}
+                        {{ partial "terms.html" (dict "context" . "data" .Site.Taxonomies.tags "type" "tags") }}
                     </div>
 
                     <div id="view-search" class="view-section hidden">
@@ -146,13 +117,17 @@
                             <div class="relative group">
                                 <input type="text" id="search-input" placeholder="Search posts..."
                                        class="w-full h-16 pl-14 pr-6 rounded-3xl bg-white/60 border border-white/60 backdrop-blur-xl text-xl text-primary placeholder:text-secondary/40 focus:outline-none focus:ring-4 focus:ring-brand/10 focus:bg-white transition-all shadow-sm group-hover:shadow-lg">
-                                <svg class="absolute left-5 top-1/2 -translate-y-1/2 w-6 h-6 text-secondary/60 group-hover:text-brand transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                                <svg class="absolute left-5 top-1/2 -translate-y-1/2 w-6 h-6 text-secondary/60 group-hover:text-brand transition-colors"
+                                     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                                     stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                </svg>
                             </div>
                             <div class="mt-8 text-center text-secondary/50 text-sm">Type keywords to search...</div>
                             <div id="search-results" class="mt-8 space-y-4"></div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
