@@ -1,0 +1,88 @@
+{{ define "main" }}
+
+<div class="h-screen w-full bg-bg flex flex-col overflow-hidden">
+
+  <div class="flex-none z-50 py-4 w-full relative">
+    {{ partial "header.html" . }}
+  </div>
+
+  <div class="flex-1 w-full relative overflow-hidden">
+
+    <div class="absolute inset-0 pointer-events-none z-40 flex justify-center">
+      <div class="w-full max-w-5xl h-full relative px-4 sm:px-8">
+        <div class="hidden md:flex absolute left-4 sm:left-6 top-0 h-full w-16 flex-col justify-center items-center">
+
+          <aside class="flex flex-col items-center gap-2 p-2 rounded-full
+                        bg-white/60 border border-white/60 backdrop-blur-xl
+                        shadow-[0_8px_30px_rgba(0,0,0,0.04)] transition-all relative pointer-events-auto">
+
+            <a href="{{ "/posts/" | relLangURL }}" class="side-tab group relative z-10" title="Back to Year">
+            <span class="font-averia font-bold text-sm text-secondary group-hover:text-primary transition-colors duration-300">Year</span>
+            </a>
+            <div class="w-6 h-px bg-black/5 my-1"></div>
+
+            <a href="{{ "/posts/" | relLangURL }}" class="side-tab group relative z-10 {{ if eq .Data.Singular "category" }}active{{ end }}" title="Category">
+            {{ if eq .Data.Singular "category" }}
+            <div class="absolute inset-0 bg-white rounded-full shadow-sm border border-black/5 -z-10"></div>
+            {{ end }}
+            <svg class="w-5 h-5 transition-colors duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+            </a>
+
+            <a href="{{ "/posts/" | relLangURL }}" class="side-tab group relative z-10 {{ if ne .Data.Singular "category" }}active{{ end }}" title="Tags">
+            {{ if ne .Data.Singular "category" }}
+            <div class="absolute inset-0 bg-white rounded-full shadow-sm border border-black/5 -z-10"></div>
+            {{ end }}
+            <svg class="w-5 h-5 transition-colors duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+            </a>
+
+            <a href="{{ "/posts/" | relLangURL }}" class="side-tab group relative z-10" title="Search">
+            <svg class="w-5 h-5 transition-colors duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            </a>
+          </aside>
+        </div>
+      </div>
+    </div>
+
+    <div id="scroll-container" class="absolute inset-0 w-full h-full overflow-y-auto no-scrollbar scroll-smooth pt-2 pb-24">
+
+      <div class="md:hidden sticky top-0 z-30 flex justify-center pb-6 pointer-events-none">
+        <div class="inline-flex items-center p-1.5 bg-white/80 rounded-full backdrop-blur-xl border border-white/50 shadow-sm pointer-events-auto">
+          <a href="{{ "/posts/" | relLangURL }}" class="mobile-tab px-4 font-bold text-brand">
+          ← 返回列表
+          </a>
+        </div>
+      </div>
+
+      <div class="w-full max-w-5xl mx-auto px-4 sm:px-8 md:pl-24">
+        <div class="relative min-h-[400px]">
+
+          <div class="relative pl-8 border-l-2 border-dashed border-black/5 mt-8 mb-10">
+            <span class="absolute -left-[9px] top-2 w-4 h-4 rounded-full bg-brand/20 border-2 border-white box-content"></span>
+
+            <h1 class="text-3xl font-black text-primary/80 mb-6 flex items-center gap-3">
+                            <span class="font-averia text-brand opacity-60">
+                                {{ if eq .Data.Singular "category" }}#{{ else }}🏷{{ end }}
+                            </span>
+
+              {{ .Title }}
+
+              <span class="text-xs font-normal text-secondary bg-white/50 px-2 py-0.5 rounded-full border border-white/50 self-center">
+                                {{ len .Pages }} 篇
+                            </span>
+            </h1>
+
+            <div class="grid gap-3 animate-fade-in-up">
+              {{ range .Pages }}
+              {{ partial "components/post-card-row.html" . }}
+              {{ end }}
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{{ end }}

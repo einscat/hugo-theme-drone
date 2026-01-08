@@ -8,56 +8,33 @@
 {{ $type := .type }}
 
 {{ if $data }}
-<div class="masonry-container">
-  {{ range $name, $taxonomy := $data }}
-  <div class="masonry-item bg-white/40 border border-white/60 rounded-[1.5rem] p-5 backdrop-blur-sm transition-all hover:bg-white/60 hover:shadow-lg hover:-translate-y-1 group cursor-pointer relative overflow-hidden">
+<div class="flex flex-wrap gap-3 justify-center content-start py-8 font-sans">
 
-    <div class="flex items-center justify-between mb-4 pb-3 border-b border-black/5 relative z-10">
-      <h3 class="text-xl font-bold text-primary flex items-center gap-2 group-hover:text-brand transition-colors">
-        {{ if eq $type "category" }}
-        <span class="text-brand opacity-60">#</span>
-        {{ else }}
-        <span class="text-brand opacity-60">🏷</span>
-        {{ end }}
+    {{ range $name, $taxonomy := $data }}
+    {{/* 构建链接 URL */}}
+    {{ $url := printf "%s%s/%s" ("/" | relLangURL) (cond (eq $type "category") "categories" "tags") ($name | urlize) }}
+
+    <a href="{{ $url }}" class="group relative inline-flex items-center gap-1.5 px-4 py-2 bg-white/50 hover:bg-white border border-white/60 hover:border-white rounded-full transition-all duration-300 hover:shadow-md hover:-translate-y-0.5 text-primary no-underline backdrop-blur-md">
+
+      <span class="text-brand/50 group-hover:text-brand transition-colors text-sm">
+        {{ if eq $type "category" }}#{{ else }}🏷{{ end }}
+      </span>
+
+        <span class="text-sm font-medium tracking-wide text-primary/90 group-hover:text-brand transition-colors">
         {{ $name }}
-      </h3>
-      <span class="text-xs font-bold bg-white px-2.5 py-1 rounded-full text-secondary shadow-sm">{{ len $taxonomy }}</span>
-    </div>
+      </span>
 
-    <ul class="space-y-2 relative z-10">
-      {{ range first 5 $taxonomy.Pages }}
-      <li>
-        <a href="{{ .RelPermalink }}" class="block p-2 -mx-2 rounded-lg hover:bg-white/50 transition-colors group/item">
-          <div class="flex items-center justify-between gap-2">
-            <span class="text-sm font-medium text-primary/80 group-hover/item:text-brand truncate">{{ .Title }}</span>
-            {{ if eq $type "category" }}
-            <span class="text-[10px] text-secondary/40 font-mono shrink-0">{{ .Date.Format "01-02" }}</span>
-            {{ end }}
-          </div>
-        </a>
-      </li>
-      {{ end }}
+        <span class="ml-0.5 text-[11px] text-secondary/60 group-hover:text-brand/60 transition-colors font-medium">
+        {{ len $taxonomy }}
+      </span>
 
-      {{ if gt (len $taxonomy.Pages) 5 }}
-      <li class="pt-2">
-        {{/* 构建链接：根据类型跳转到 /categories/name 或 /tags/name */}}
-        <a href="{{ "/" | relLangURL }}{{ if eq $type "category" }}categories{{ else }}tags{{ end }}/{{ $name | urlize }}" class="text-xs text-secondary hover:text-brand font-medium flex items-center gap-1">
-        查看全部...
-        </a>
-      </li>
-      {{ end }}
-    </ul>
-
-    {{ if eq $type "category" }}
-    <div class="absolute -right-4 -bottom-4 text-brand/5 rotate-12 pointer-events-none">
-      <svg class="w-24 h-24" fill="currentColor" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-    </div>
+    </a>
     {{ end }}
-  </div>
-  {{ end }}
+
 </div>
 {{ else }}
-<div class="text-center py-20 text-secondary border-2 border-dashed border-black/5 rounded-3xl">
-  暂无{{ if eq $type "category" }}分类{{ else }}标签{{ end }}数据
+<div class="flex flex-col items-center justify-center py-20 opacity-40">
+    <div class="text-3xl mb-2 grayscale">💨</div>
+    <div class="text-sm text-secondary tracking-widest">NO DATA</div>
 </div>
 {{ end }}
