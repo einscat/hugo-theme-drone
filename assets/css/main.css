@@ -288,6 +288,18 @@
 #TableOfContents ul { list-style: none; padding: 0; margin: 0; }
 #TableOfContents li { margin: 6px 0; line-height: 1.4; }
 #TableOfContents ul ul { padding-left: 12px; border-left: 1px solid rgba(0,0,0,0.1); margin-left: 4px; }
+/* [新增] 处理 H4 (第三级嵌套) */
+#TableOfContents ul ul ul {
+    /* 继承上一级的左边框设计，但再次缩进 */
+    margin-left: 4px;
+    padding-left: 12px;
+}
+
+/* 可选：让 H4 的字体稍微再小一点，区分层级 */
+#TableOfContents ul ul ul a {
+    font-size: 0.8rem;
+    color: #888;
+}
 #TableOfContents a {
     text-decoration: none;
     color: #666;

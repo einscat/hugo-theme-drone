@@ -97,7 +97,9 @@
 
     // 目录高亮
     const tocLinks = document.querySelectorAll('.sidebar-toc a');
-    const headings = document.querySelectorAll('.layout-content h1, .layout-content h2, .layout-content h3');
+    // 建议去掉 h1，因为正文中通常只从 h2 开始，且 h1 往往是文章大标题不需要在侧边栏高亮
+    const headings = document.querySelectorAll('.layout-content h2, .layout-content h3, .layout-content h4');
+
 
     if (tocLinks.length > 0 && headings.length > 0) {
       const observerOptions = {

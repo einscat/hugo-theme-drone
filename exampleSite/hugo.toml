@@ -68,4 +68,7 @@ theme = 'hugo-theme-drone'
   [markup.goldmark]
     [markup.goldmark.renderer]
       unsafe = true
+  [markup.tableOfContents]
+    startLevel = 2
+    endLevel = 4  # 这里必须改为 4 或更高
 
