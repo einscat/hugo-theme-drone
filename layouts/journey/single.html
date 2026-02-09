@@ -1,0 +1,66 @@
+{{ define "main" }}
+
+<div class="h-screen w-full bg-bg flex flex-col overflow-hidden">
+
+  <div class="flex-none z-50 py-4 w-full relative">
+    {{ partial "header.html" . }}
+  </div>
+
+  <div class="flex-1 w-full flex flex-col overflow-hidden">
+
+    <div class="flex-none z-40 w-full flex justify-center bg-bg/95 backdrop-blur-sm">
+      <div class="w-full max-w-5xl px-4 sm:px-8 layout-fixed-header">
+
+        {{ $nav := .Params.page_nav | default .Params.reading_nav }}
+        {{ if $nav }}
+        <nav class="layout-sub-nav">
+          {{ $currentURL := .RelPermalink }}
+          {{ range $index, $item := $nav }}
+          {{ if ne $index 0 }}<span class="separator">·</span>{{ end }}
+
+          {{/* 智能高亮逻辑 */}}
+          {{ $currentClean := strings.TrimSuffix "/" $currentURL }}
+          {{ $itemClean := strings.TrimSuffix "/" $item.url }}
+          {{ $isActive := or (eq $currentURL $item.url) (eq $currentClean $itemClean) }}
+
+          <a href="{{ $item.url }}" class="{{ if $isActive }}active{{ end }}">
+            {{ $item.title }}
+          </a>
+          {{ end }}
+        </nav>
+        {{ end }}
+
+        <hr class="layout-divider">
+
+        {{ if .Params.quote }}
+        <blockquote class="layout-quote">
+          {{ .Params.quote }}
+        </blockquote>
+        {{ end }}
+
+      </div>
+    </div>
+
+    <div class="flex-1 w-full overflow-y-auto no-scrollbar scroll-smooth">
+
+      <div class="w-full max-w-5xl mx-auto px-4 sm:px-8">
+        <article class="reading-content mx-auto animate-fade-in-up reading-scroll-area
+                       prose max-w-none
+                       prose-headings:font-bold prose-headings:text-[var(--color-primary)]
+                       prose-p:text-[var(--color-primary)] prose-p:opacity-90
+                       prose-a:text-[var(--color-brand)] hover:prose-a:underline
+                       prose-strong:text-[var(--color-primary)]
+                       prose-blockquote:border-l-4 prose-blockquote:border-[var(--color-brand)] prose-blockquote:text-[var(--color-primary)]
+                       prose-img:rounded-xl prose-img:shadow-md">
+          {{ .Content }}
+        </article>
+
+        <div class="h-24"></div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+{{ end }}

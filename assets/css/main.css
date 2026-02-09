@@ -801,3 +801,142 @@
   border-color: rgba(192, 91, 77, 0.1);
   box-shadow: 0 2px 6px rgba(0,0,0,0.05);
 }
+
+/* =========================================
+   8. 旅程 (Journey: Moments, Photos, Videos)
+   ========================================= */
+
+/* --- 1. 阅读区域通用排版 (对应 moments.md) --- */
+/* 注：大部分样式已通过 Tailwind 的 prose 类在 HTML 中实现，此处做补充增强 */
+
+.reading-content {
+  color: var(--color-primary);
+  font-size: 1.05rem;
+  line-height: 1.8;
+}
+
+/* 针对 Markdown 中的日期标题 (H1) 做特殊处理，类似时间轴节点 */
+.reading-content h1 {
+  position: relative;
+  font-size: 1.5rem;
+  margin-top: 2.5rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px dashed rgba(192, 91, 77, 0.3); /* 品牌色虚线 */
+  color: var(--color-brand);
+}
+
+/* 针对 Markdown 中的 H2 */
+.reading-content h2 {
+  font-size: 1.25rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  color: var(--color-primary);
+  opacity: 0.9;
+}
+
+/* 引用块增强 */
+.reading-content blockquote {
+  font-style: italic;
+  background: rgba(255, 255, 255, 0.4);
+  padding: 1rem 1.5rem;
+  border-radius: 0 8px 8px 0;
+}
+
+/* 代码块背景统一 */
+.reading-content pre {
+  background-color: #f5f7fa !important; /* 浅灰背景，比纯黑更护眼 */
+  border: 1px solid rgba(0,0,0,0.05);
+  border-radius: 8px;
+}
+
+
+/* --- 2. 照片墙样式 (对应 photos.md) --- */
+
+/* 分类标题 */
+.category-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 30px 0 15px 0;
+  color: var(--color-primary);
+  padding-left: 12px;
+  border-left: 4px solid var(--color-brand); /* 品牌色左标示 */
+  display: flex;
+  align-items: center;
+}
+
+/* 照片网格容器 */
+.photo-wall {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* 自适应列宽 */
+  gap: 16px;
+  padding: 16px;
+
+  /* 容器背景：淡淡的磨砂玻璃 */
+  background-color: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 16px;
+  margin-bottom: 40px;
+}
+
+/* 照片卡片 (拍立得风格) */
+.photo-item {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+
+  /* 卡片质感：半透明白底 + 边框 */
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  padding: 6px; /* 留出白边，像相框一样 */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+/* 悬停交互：上浮 + 投影加深 (与 Projects 卡片一致) */
+.photo-item:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+  z-index: 10;
+  background-color: #fff; /* 悬停时变纯白 */
+}
+
+/* 图片本体 */
+.photo-item img,
+.photo-item video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 4px; /* 图片本身微圆角 */
+  aspect-ratio: 1 / 1; /* 可选：强制正方形，或者去掉这行保持原比例 */
+}
+
+
+/* --- 3. 视频容器样式 (对应 videos.md) --- */
+
+/* 16:9 响应式容器 */
+.iframe-container {
+  position: relative;
+  overflow: hidden;
+  padding-top: 56.25%; /* 16:9 Aspect Ratio */
+  margin: 1.5rem 0 3rem 0;
+
+  /* 容器装饰 */
+  background-color: #000;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 4px solid rgba(255, 255, 255, 0.5); /* 半透明白边框 */
+}
+
+.iframe-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
