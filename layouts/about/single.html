@@ -1,0 +1,99 @@
+{{ define "main" }}
+
+<div class="h-screen w-full bg-bg flex flex-col overflow-hidden">
+
+  <div class="flex-none z-50 py-4 w-full relative">
+    {{ partial "header.html" . }}
+  </div>
+
+  <div class="flex-1 w-full flex flex-col overflow-hidden">
+
+    {{/* 获取当前目录下所有的 md 文件作为资源 (排除 index.md 自身) */}}
+    {{ $tabs := .Resources.Match "*.md" }}
+    {{/* 根据 front matter 中的 weight 进行排序 */}}
+    {{ $tabs = sort $tabs "Params.weight" }}
+
+    <div class="flex-none z-40 w-full flex justify-center bg-bg/95 backdrop-blur-sm">
+      <div class="w-full max-w-5xl px-4 sm:px-8 layout-fixed-header">
+
+        <div class="filter-container">
+          <button class="filter-btn active" data-filter="all">全部</button>
+
+          {{ range $tabs }}
+          {{ $id := .Name | replaceRE "\\.md$" "" }}
+          <button class="filter-btn" data-filter="{{ $id }}">{{ .Title }}</button>
+          {{ end }}
+        </div>
+
+        <hr class="layout-divider">
+
+        {{ if .Params.quote }}
+        <blockquote class="layout-quote">
+          {{ .Params.quote }}
+        </blockquote>
+        {{ end }}
+
+      </div>
+    </div>
+
+    <div class="flex-1 w-full overflow-y-auto no-scrollbar scroll-smooth">
+      <div class="w-full max-w-4xl mx-auto px-4 sm:px-8 pt-4 pb-24">
+
+        <div class="about-container animate-fade-in-up" style="animation-delay: 0.1s;">
+          {{ range $tabs }}
+          {{ $id := .Name | replaceRE "\\.md$" "" }}
+          <div class="about-card" data-id="{{ $id }}">
+
+            <div class="about-card-title">{{ .Params.card_title }}</div>
+
+            <div class="about-body">
+              {{ .Content }}
+            </div>
+
+          </div>
+          {{ end }}
+        </div>
+
+        <div class="h-12"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const buttons = document.querySelectorAll('.filter-btn');
+    const cards = document.querySelectorAll('.about-card');
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', function() {
+        // 1. 按钮样式切换
+        buttons.forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+
+        const filterValue = this.getAttribute('data-filter');
+
+        // 2. 内容卡片显示/隐藏
+        cards.forEach(card => {
+          if (filterValue === 'all') {
+            card.classList.remove('hidden');
+            card.style.animation = 'fadeInUp 0.5s ease-out forwards';
+          } else {
+            const cardId = card.getAttribute('data-id');
+            if (cardId === filterValue) {
+              card.classList.remove('hidden');
+              card.style.animation = 'none';
+              card.offsetHeight; /* trigger reflow */
+              card.style.animation = 'fadeInUp 0.5s ease-out forwards';
+            } else {
+              card.classList.add('hidden');
+            }
+          }
+        });
+      });
+    });
+  });
+</script>
+
+{{ end }}

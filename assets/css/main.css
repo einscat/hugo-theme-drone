@@ -303,3 +303,200 @@
 .border-dashed {
   border-color: rgba(0, 0, 0, 0.08);
 }
+
+/* =========================================
+   5. 关于页样式 (About Page)
+   ========================================= */
+
+/* --- 专用工具类 --- */
+
+/* 隐藏滚动条 (用于中间内容区域) */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* 专用入场动画 (与首页不同，这个没有缩放效果，仅位移) */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.5s ease-out forwards;
+}
+
+/* --- 布局组件 (Layout) --- */
+
+/* 顶部固定容器布局 */
+.layout-fixed-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 10px;
+  width: 100%;
+}
+
+/* 虚线分割线 */
+.layout-divider {
+  width: 100%;
+  border: 0;
+  border-bottom: 2px dashed var(--color-brand);
+  opacity: 0.5;
+  margin: 0.5rem 0;
+}
+
+/* 引用块 (对应 index.md 中的 quote) */
+.layout-quote {
+  width: 100%;
+  border-left: 4px solid var(--color-brand);
+  background-color: rgba(192, 91, 77, 0.05); /* 基于 brand 色变淡 */
+  padding: 4px 16px;
+  border-radius: 4px;
+  margin: 0;
+  font-style: italic;
+  font-size: 1.05rem;
+  display: flex;
+  align-items: center;
+  min-height: 36px;
+  color: var(--color-primary);
+}
+
+.layout-quote p {
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1.4;
+}
+
+/* --- 筛选按钮组 (Filter System) --- */
+
+.filter-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 0.5rem;
+  padding: 0 4px;
+}
+
+.filter-btn {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 5px 14px;
+  border-radius: 99px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  background-color: transparent;
+  color: var(--color-brand);
+  opacity: 0.7;
+  border: 1px solid transparent;
+}
+
+.filter-btn:hover {
+  background-color: rgba(192, 91, 77, 0.05);
+  opacity: 1;
+}
+
+/* 激活状态 */
+.filter-btn.active {
+  background-color: var(--color-brand);
+  color: #fff;
+  opacity: 1;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(192, 91, 77, 0.2);
+}
+
+/* --- 关于页内容卡片 (About Cards) --- */
+
+.about-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding-bottom: 40px;
+}
+
+.about-card {
+  padding: 32px;
+  /* 这里虽然和全局 card 类似，但为了保证 about 页面的特殊透明度，建议保留独立定义或继承 */
+  background-color: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 16px;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* JS控制的隐藏状态 */
+.about-card.hidden {
+  display: none;
+}
+
+.about-card-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: 24px;
+  text-align: center;
+  padding-bottom: 16px;
+  border-bottom: 1px dashed rgba(192, 91, 77, 0.2);
+}
+
+/* --- Markdown 内容排版 (.about-body) --- */
+/* 这是渲染 me.md, site.md 等文件内容的关键样式 */
+
+.about-body {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: #4b5563;
+}
+
+.about-body p {
+  margin-bottom: 1.2em;
+}
+
+/* 关于页特有的 H4 样式 */
+.about-body h4 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-brand);
+  margin-top: 1.5em;
+  margin-bottom: 0.8em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.about-body ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.about-body li {
+  position: relative;
+  padding-left: 1.2em;
+  margin-bottom: 0.8em;
+}
+
+/* 自定义列表圆点 */
+.about-body li::before {
+  content: "•";
+  color: var(--color-brand);
+  font-weight: bold;
+  position: absolute;
+  left: 0;
+}
+
+.about-body strong {
+  color: var(--color-primary);
+  font-weight: 600;
+}
