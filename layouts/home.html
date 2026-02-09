@@ -9,6 +9,14 @@
     {{ partial "cards/calendar.html" . }}
 
   </div>
+
+  {{ if .Site.Params.icp }}
+  <div class="absolute bottom-4 w-full text-center z-20 pointer-events-none">
+    <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer" class="pointer-events-auto text-xs font-sans text-secondary/60 hover:text-brand transition-colors no-underline">
+      {{ .Site.Params.icp }}
+    </a>
+  </div>
+  {{ end }}
 </div>
 
 {{ $clockJs := resources.Get "js/clock.js" | js.Build (dict "Minify" true) | resources.Fingerprint }}

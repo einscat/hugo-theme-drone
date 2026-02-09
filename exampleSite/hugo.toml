@@ -16,6 +16,9 @@ theme = 'hugo-theme-drone'
     # 首页 Photo Card 展示的图片路径
     home_photo_url = "/images/cat.png"
 
+    # 备案信息
+    icp = "苏ICP备20013139号-2"
+
 [params.meta]
         username = "Y"
         avatar = "/images/avatar.png"
