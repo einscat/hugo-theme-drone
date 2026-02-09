@@ -19,10 +19,14 @@ theme = 'hugo-theme-drone'
     # 备案信息
     icp = "苏ICP备20013139号-2"
 
-[params.meta]
+    [params.meta]
         username = "Y"
         avatar = "/images/avatar.png"
         description = "活死人の行知路..."
+
+# 新增分页配置
+[pagination]
+    pagerSize = 20
 
 [[menu.main]]
     name = "笔记"

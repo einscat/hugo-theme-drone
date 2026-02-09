@@ -1,0 +1,57 @@
+{{ define "main" }}
+<div class="h-screen w-full bg-bg flex flex-col overflow-hidden">
+    {{/* 1. Header (固定在顶部) */}}
+    <div class="flex-none z-50 py-4 w-full relative">
+        {{ partial "header.html" . }}
+    </div>
+
+    {{/* 2. Desktop Sidebar (固定在左侧，不随内容滚动) */}}
+    {{ partial "posts/left-tab-nav.html" . }}
+
+    {{/* 3. 滚动区域 (占据剩余空间) */}}
+    <div class="flex-1 w-full relative overflow-hidden">
+        <div id="scroll-container" class="absolute inset-0 w-full h-full overflow-y-auto no-scrollbar scroll-smooth pt-2 pb-24">
+
+            {{/* 文章列表内容容器 */}}
+            <div class="w-full max-w-5xl mx-auto px-4 sm:px-8">
+                <div class="relative min-h-[400px]">
+                    <div class="view-section">
+                        <div class="grid gap-10">
+                            {{/* 1. 初始化分页器 (只筛选 posts 类型，避免混合其他页面) */}}
+                            {{ $paginator := .Paginate (where .Pages "Type" "posts") }}
+
+                            {{/* 2. 按年份分组循环 */}}
+                            {{ range $paginator.Pages.GroupByDate "2006" }}
+                            <div class="relative pl-8 border-l-2 border-dashed border-black/5">
+                                <span class="absolute -left-[9px] top-2 w-4 h-4 rounded-full bg-brand/20 border-2 border-white box-content"></span>
+
+                                <h3 class="text-3xl font-black text-primary/80 mb-6 font-averia flex items-center gap-3">
+                                    {{ .Key }}
+                                    <span class="text-xs font-normal text-secondary bg-white/50 px-2 py-0.5 rounded-full border border-white/50">{{ len .Pages }}</span>
+                                </h3>
+
+                                <div class="grid gap-3">
+                                    {{ range .Pages }}
+                                    {{ partial "posts/post-card-row.html" . }}
+                                    {{ end }}
+                                </div>
+                            </div>
+                            {{ end }}
+                        </div>
+
+                        {{/* 3. 调用分页组件 */}}
+                        {{ partial "posts/pagination.html" $paginator }}
+                    </div>
+                </div>
+            </div>
+
+            {{/* 底部留白，防止内容被遮挡 */}}
+            <div class="h-12"></div>
+        </div>
+    </div>
+</div>
+
+{{/* 加载列表页专用脚本 */}}
+{{ $js := resources.Get "js/list.js" | js.Build (dict "Minify" true) | resources.Fingerprint }}
+<script src="{{ $js.RelPermalink }}" defer></script>
+{{ end }}
