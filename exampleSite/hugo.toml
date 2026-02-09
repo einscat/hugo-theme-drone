@@ -3,3 +3,17 @@ languageCode = 'en-US'
 title = 'My New Hugo Site'
 
 theme = 'hugo-theme-drone'
+
+[author]
+    name = "活死人"
+
+[params]
+    # 站点信息（可选，不需要的可以直接注释掉）
+    logoTitle = "活死人"                                   # 默认值: 上面设置的title值
+    keywords = ["Hugo", "theme","drone"]
+    description = "遥望未来，一片混沌，行知路，虽千万里，吾往矣"
+
+    [params.meta]
+        username = "Y"
+        avatar = "/images/avatar.png"
+        description = "活死人の行知路..."

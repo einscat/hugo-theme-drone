@@ -1,9 +1,9 @@
 {{ define "main" }}
-  {{ .Content }}
-  {{ range site.RegularPages }}
-    <section>
-      <h2><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></h2>
-      {{ .Summary }}
-    </section>
-  {{ end }}
+<div class="relative w-full h-screen overflow-hidden bg-bg">
+  <div class="absolute left-1/2 top-1/2 z-10 w-0 h-0">
+
+    {{ partial "cards/hi.html" . }}
+
+  </div>
+</div>
 {{ end }}

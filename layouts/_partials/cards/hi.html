@@ -1,0 +1,38 @@
+{{/* 读取 hugo.toml 中的 [params.meta] 配置 */}}
+{{ $meta := .Site.Params.meta }}
+
+<div class="card card-hi">
+    <div class="relative w-24 h-24 mb-4">
+        <img
+                src="{{ $meta.avatar | default "/images/avatar.png" }}"
+        alt="{{ $meta.username }}"
+        class="w-full h-full rounded-full border-4 border-white/30 object-cover shadow-lg"
+        />
+        <div class="absolute bottom-1 right-1 w-5 h-5 bg-[#35bfab] rounded-full border-4 border-[#eee]"></div>
+    </div>
+
+    <h2 id="greeting-text" class="text-xl font-bold text-primary/80 mb-1">Hello World</h2>
+
+    <h1 class="text-3xl font-black text-primary tracking-wide mb-3 font-averia">
+        {{ $meta.username }}
+    </h1>
+
+    <p class="text-sm text-secondary px-8 leading-relaxed line-clamp-2">
+        {{ $meta.description }}
+    </p>
+
+    <div class="absolute -z-10 inset-0 bg-gradient-to-br from-white/40 to-transparent rounded-[inherit] pointer-events-none"></div>
+</div>
+
+<script>
+    (function() {
+        const hour = new Date().getHours();
+        let greeting = 'Good Night';
+        if (hour >= 6 && hour < 12) greeting = 'Good Morning';
+        else if (hour >= 12 && hour < 18) greeting = 'Good Afternoon';
+        else if (hour >= 18 && hour < 22) greeting = 'Good Evening';
+
+        const el = document.getElementById('greeting-text');
+        if(el) el.innerText = greeting;
+    })();
+</script>

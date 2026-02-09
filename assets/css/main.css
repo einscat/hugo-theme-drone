@@ -1,22 +1,77 @@
-body {
-  color: #222;
-  font-family: sans-serif;
-  line-height: 1.5;
-  margin: 1rem;
-  max-width: 768px;
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/* =========================================
+   1. 核心主题变量 (Theme Config)
+   ========================================= */
+@theme {
+  /* 字体 */
+  --font-averia: 'Averia Gruesa Libre', sans-serif;
+  --font-sans: 'PingFang SC', -apple-system, system-ui, sans-serif;
+
+  /* 站点配色 */
+  --color-brand: #c05b4d;
+  --color-brand-secondary: #FCC841;
+  --color-primary: #4E3F42;
+  --color-secondary: #7b888e;
+  --color-bg: #eeeeee;
+
+  /* UI 变量 */
+  --color-border: #ffffff;
+  --color-card: #ffffff66;
 }
 
-header {
-  border-bottom: 1px solid #222;
-  margin-bottom: 1rem;
+/* =========================================
+   2. 全局工具类 (Utilities)
+   ========================================= */
+
+/* 核心卡片样式：磨砂玻璃效果 */
+/* 理由：这是首页所有卡片的基础，必须全局定义 */
+@utility card {
+  @apply bg-card absolute rounded-[40px] border border-white/60;
+  box-shadow: 0 40px 50px -32px rgba(0, 0, 0, 0.05), inset 0 0 20px rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(12px);
 }
 
-footer {
-  border-top: 1px solid #222;
-  margin-top: 1rem;
+/* =========================================
+   3. 核心动画 (Animations)
+   ========================================= */
+
+/* 首页卡片入场动画 */
+@keyframes fade-in-up-scale {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
-a {
-  color: #00e;
-  text-decoration: none;
+/* =========================================
+   4. 首页组件样式 (Home Components)
+   ========================================= */
+
+/* Hi Card - 个人信息问候卡片 */
+.card-hi {
+  /* 定位与尺寸 (核心布局) */
+  width: 360px;
+  height: 288px;
+  /* 你的布局基于中心点偏移，负值代表向左/向上 */
+  left: -180px;
+  top: -144px;
+
+  /* 内部布局 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  user-select: none;
+
+  /* 动画 */
+  opacity: 0;
+  animation: fade-in-up-scale 0.6s ease-out forwards;
+  animation-delay: 0.1s; /* 第一个出场 */
 }
