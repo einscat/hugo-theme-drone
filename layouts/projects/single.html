@@ -1,0 +1,103 @@
+{{ define "main" }}
+
+<div class="h-screen w-full bg-bg flex flex-col overflow-hidden">
+
+  <div class="flex-none z-50 py-4 w-full relative">
+    {{ partial "header.html" . }}
+  </div>
+
+  <div class="flex-1 w-full flex flex-col overflow-hidden">
+
+    <div class="flex-none z-40 w-full flex justify-center bg-bg/95 backdrop-blur-sm">
+      <div class="w-full max-w-5xl px-4 sm:px-8 layout-fixed-header">
+
+        {{/* 子导航 (支持 page_nav) */}}
+        {{ $nav := .Params.page_nav | default .Params.reading_nav }}
+        {{ if $nav }}
+        <nav class="layout-sub-nav">
+          {{ $currentURL := .RelPermalink }}
+          {{ range $index, $item := $nav }}
+          {{ if ne $index 0 }}<span class="separator">·</span>{{ end }}
+
+          {{ $currentClean := strings.TrimSuffix "/" $currentURL }}
+          {{ $itemClean := strings.TrimSuffix "/" $item.url }}
+          {{ $isActive := or (eq $currentURL $item.url) (eq $currentClean $itemClean) }}
+
+          <a href="{{ $item.url }}" class="{{ if $isActive }}active{{ end }}">
+            {{ $item.title }}
+          </a>
+          {{ end }}
+        </nav>
+        {{ end }}
+
+        {{/* 虚线分割 */}}
+        {{ if or $nav .Params.quote }}
+        <hr class="layout-divider">
+        {{ end }}
+
+        {{/* 引用块 */}}
+        {{ if .Params.quote }}
+        <blockquote class="layout-quote">
+          {{ .Params.quote }}
+        </blockquote>
+        {{ end }}
+
+      </div>
+    </div>
+
+    <div class="flex-1 w-full overflow-y-auto no-scrollbar scroll-smooth">
+
+      <div class="w-full max-w-5xl mx-auto px-4 sm:px-8 pt-4 pb-24">
+
+        <article class="layout-content mx-auto animate-fade-in-up">
+          {{ .Content }}
+        </article>
+
+        <div class="projects-grid animate-fade-in-up" style="animation-delay: 0.1s;">
+
+          {{/* 遍历 data/projects.json */}}
+          {{ range $.Site.Data.projects }}
+          <div class="project-card">
+
+            <div class="project-header">
+              <img src="{{ .image }}" alt="{{ .name }}" class="project-icon">
+
+              <div class="project-info">
+                <div class="project-title-row">
+                  <h3 class="project-title">{{ .name }}</h3>
+                  <span class="project-year">{{ .year }}</span>
+                </div>
+                <div class="project-tags">
+                  {{ range .tags }}
+                  <span class="project-tag">{{ . }}</span>
+                  {{ end }}
+                </div>
+              </div>
+            </div>
+
+            <p class="project-desc">{{ .description }}</p>
+
+            <div class="project-actions">
+              {{ if .url }}
+              <a href="{{ .url }}" target="_blank" class="project-btn">Website</a>
+              {{ end }}
+              {{ if .github }}
+              <a href="{{ .github }}" target="_blank" class="project-btn">GitHub</a>
+              {{ end }}
+              {{ if .npm }}
+              <a href="{{ .npm }}" target="_blank" class="project-btn">NPM</a>
+              {{ end }}
+            </div>
+
+          </div>
+          {{ end }}
+
+        </div>
+        <div class="h-12"></div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+{{ end }}
