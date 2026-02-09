@@ -1,0 +1,119 @@
+{{ define "main" }}
+
+<div class="h-screen w-full bg-bg flex flex-col overflow-hidden">
+  <div class="flex-none z-50 py-4 w-full relative">
+    {{ partial "header.html" . }}
+  </div>
+
+  {{ partial "posts/left-tab-nav.html" . }}
+
+  <div class="flex-1 w-full flex flex-col overflow-hidden">
+    <div class="flex-1 w-full overflow-y-auto no-scrollbar scroll-smooth" id="scroll-container">
+      <div class="article-container pt-8 pb-24">
+
+        <header class="w-full flex flex-col items-center mb-4 layout-fixed-header">
+          <h1 class="article-fixed-title">{{ .Title }}</h1>
+
+          <hr class="layout-divider">
+
+          <div class="article-fixed-meta">
+            <div class="meta-left">
+              <span style="opacity: 0.7;">📅</span>
+              <time>{{ .Date.Format "2006-01-02" }}</time>
+              <span class="mx-2 opacity-30">|</span>
+              <span style="opacity: 0.7;">📝</span>
+              <span>{{ .WordCount }} 字</span>
+            </div>
+
+            {{ if .Params.tags }}
+            <div class="meta-tags">
+              {{ range .Params.tags }}
+              <span class="meta-tag">#{{ . }}</span>
+              {{ end }}
+            </div>
+            {{ end }}
+          </div>
+        </header>
+
+        <main class="article-main">
+          <article class="article-card animate-fade-in-up">
+            <div class="layout-content prose prose-slate max-w-none
+                        prose-headings:font-bold prose-headings:tracking-tight
+                        prose-h2:mt-8 prose-h2:mb-4 prose-h2:text-2xl prose-h2:text-primary
+                        prose-h3:text-xl
+                        prose-a:text-[var(--color-brand)] prose-a:no-underline hover:prose-a:underline
+                        prose-img:rounded-xl prose-img:shadow-md
+                        prose-code:text-[var(--color-brand)] prose-code:bg-brand/10 prose-code:px-1 prose-code:rounded">
+              {{ .Content }}
+            </div>
+          </article>
+        </main>
+
+        {{ partial "posts/right-toc-nav.html" . }}
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  // 保持原有 Script 不变
+  document.addEventListener('DOMContentLoaded', function() {
+    const scrollContainer = document.getElementById('scroll-container');
+
+    // 代码块复制逻辑 (不变)
+    document.querySelectorAll('pre').forEach((pre) => {
+      let lang = 'TEXT';
+      const code = pre.querySelector('code');
+      if (code && code.className) {
+        const match = code.className.match(/language-(\w+)/);
+        if (match) lang = match[1].toUpperCase();
+      }
+      const wrapper = document.createElement('div');
+      wrapper.className = 'code-block-wrapper';
+      const header = document.createElement('div');
+      header.className = 'code-block-header';
+      header.innerHTML = `<span>${lang}</span><button class="code-copy-btn"><span>Copy</span></button>`;
+      pre.parentNode.insertBefore(wrapper, pre);
+      wrapper.appendChild(header);
+      wrapper.appendChild(pre);
+
+      header.querySelector('.code-copy-btn').addEventListener('click', function() {
+        const btn = this;
+        const text = code ? code.textContent : pre.textContent;
+        navigator.clipboard.writeText(text).then(() => {
+          btn.innerHTML = `<span style="color:#10b981">Copied!</span>`;
+          setTimeout(() => { btn.innerHTML = `<span>Copy</span>`; }, 2000);
+        });
+      });
+    });
+
+    // 目录高亮逻辑 (不变)
+    const tocLinks = document.querySelectorAll('.sidebar-toc a');
+    const headings = document.querySelectorAll('.layout-content h2, .layout-content h3, .layout-content h4');
+
+    if (tocLinks.length > 0 && headings.length > 0) {
+      const observerOptions = {
+        root: scrollContainer,
+        rootMargin: '-100px 0px -70% 0px', // 调整了视口检测区域，适应滚动标题
+        threshold: 0
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const id = entry.target.getAttribute('id');
+            tocLinks.forEach(link => link.classList.remove('active'));
+            const activeLink = document.querySelector(`.sidebar-toc a[href="#${id}"]`);
+            if (activeLink) {
+              activeLink.classList.add('active');
+            }
+          }
+        });
+      }, observerOptions);
+
+      headings.forEach(heading => observer.observe(heading));
+    }
+  });
+</script>
+{{ end }}
