@@ -500,3 +500,111 @@
   color: var(--color-primary);
   font-weight: 600;
 }
+
+/* =========================================
+   6. 效率工具页样式 (Tools Page)
+   ========================================= */
+
+/* 正文容器 (用于包裹页面顶部的 Markdown 简介) */
+.layout-content {
+  width: 100%;
+  /* 如果希望正文也像 About 页面一样排版，可以取消注释下面这行 */
+  /* @apply prose prose-slate max-w-none; */
+}
+
+/* --- 网格布局 --- */
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+  padding: 10px 0 40px 0;
+}
+
+/* --- 工具卡片 (Tool Card) --- */
+.tool-card {
+  display: flex;
+  flex-direction: column;
+  padding: 14px;
+
+  /* 卡片背景：保持与全局风格一致的磨砂感 */
+  background-color: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 12px;
+
+  /* 交互属性 */
+  transition: transform 0.2s, box-shadow 0.2s, opacity 0.3s;
+  text-decoration: none !important;
+  height: 100%; /* 确保在网格中高度拉伸一致 */
+}
+
+/* JS 筛选时的隐藏状态 */
+.tool-card.hidden {
+  display: none;
+}
+
+/* 悬停效果 */
+.tool-card:hover {
+  background-color: rgba(255, 255, 255, 0.9);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.08);
+}
+
+/* --- 卡片内部元素 --- */
+
+.tool-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.tool-logo {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  object-fit: cover;
+  flex-shrink: 0;
+  background-color: #fff;
+  border: 1px solid rgba(0,0,0,0.05);
+}
+
+.tool-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.tool-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-primary); /* 使用主题变量 */
+  margin: 0;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 0.2s;
+}
+
+.tool-card:hover .tool-title {
+  color: var(--color-brand); /* 悬停时变品牌色 */
+}
+
+/* 标签区域 */
+.tool-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: auto; /* 确保标签始终在卡片底部 */
+}
+
+.tool-tag {
+  font-size: 0.7rem;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background-color: rgba(52, 73, 94, 0.05);
+  color: rgba(52, 73, 94, 0.7);
+}

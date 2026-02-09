@@ -1,0 +1,112 @@
+{{ define "main" }}
+
+<div class="h-screen w-full bg-bg flex flex-col overflow-hidden">
+
+  <div class="flex-none z-50 py-4 w-full relative">
+    {{ partial "header.html" . }}
+  </div>
+
+  <div class="flex-1 w-full flex flex-col overflow-hidden">
+
+    <div class="flex-none z-40 w-full flex justify-center bg-bg/95 backdrop-blur-sm">
+      <div class="w-full max-w-5xl px-4 sm:px-8 layout-fixed-header">
+
+        {{ $allTags := slice }}
+        {{ range $.Site.Data.tools }}
+        {{ range .tags }}
+        {{ $allTags = $allTags | append . }}
+        {{ end }}
+        {{ end }}
+        {{ $uniqueTags := $allTags | uniq | sort }}
+
+        <div class="filter-container">
+          <button class="filter-btn active" data-filter="all">全部</button>
+
+          {{ range $uniqueTags }}
+          <button class="filter-btn" data-filter="{{ . }}">{{ . }}</button>
+          {{ end }}
+        </div>
+
+        <hr class="layout-divider">
+
+        {{ if .Params.quote }}
+        <blockquote class="layout-quote">
+          {{ .Params.quote }}
+        </blockquote>
+        {{ end }}
+
+      </div>
+    </div>
+
+    <div class="flex-1 w-full overflow-y-auto no-scrollbar scroll-smooth">
+      <div class="w-full max-w-5xl mx-auto px-4 sm:px-8 pt-4 pb-24">
+
+        <article class="layout-content mx-auto animate-fade-in-up">
+          {{ .Content }}
+        </article>
+
+        <div class="tools-grid animate-fade-in-up" style="animation-delay: 0.1s;">
+          {{ range $.Site.Data.tools }}
+
+          {{ $tagsStr := delimit .tags "," }}
+
+          <a href="{{ .url }}" target="_blank" rel="noopener noreferrer"
+             class="tool-card"
+             data-tags="{{ $tagsStr }}">
+
+            <div class="tool-header">
+              <img src="{{ .logo }}" alt="{{ .name }}" class="tool-logo">
+              <div class="tool-info">
+                <h3 class="tool-title">{{ .name }}</h3>
+              </div>
+            </div>
+
+            <div class="tool-tags">
+              {{ range .tags }}
+              <span class="tool-tag">{{ . }}</span>
+              {{ end }}
+            </div>
+
+          </a>
+          {{ end }}
+        </div>
+
+        <div class="h-12"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const buttons = document.querySelectorAll('.filter-btn');
+    const cards = document.querySelectorAll('.tool-card');
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', function() {
+        // 1. 切换按钮激活状态
+        buttons.forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+
+        const filterValue = this.getAttribute('data-filter');
+
+        // 2. 筛选卡片
+        cards.forEach(card => {
+          if (filterValue === 'all') {
+            card.classList.remove('hidden');
+          } else {
+            const cardTags = card.getAttribute('data-tags').split(',');
+            if (cardTags.includes(filterValue)) {
+              card.classList.remove('hidden');
+            } else {
+              card.classList.add('hidden');
+            }
+          }
+        });
+      });
+    });
+  });
+</script>
+
+{{ end }}
