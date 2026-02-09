@@ -5,10 +5,14 @@
     {{ partial "cards/hi.html" . }}
     {{ partial "cards/clock.html" . }}
     {{ partial "cards/moments.html" . }}
+    {{ partial "cards/nav.html" . }}
 
   </div>
 </div>
 
 {{ $clockJs := resources.Get "js/clock.js" | js.Build (dict "Minify" true) | resources.Fingerprint }}
 <script src="{{ $clockJs.RelPermalink }}" defer></script>
+
+{{ $navJs := resources.Get "js/nav.js" | js.Build (dict "Minify" true) | resources.Fingerprint }}
+<script src="{{ $navJs.RelPermalink }}" defer></script>
 {{ end }}

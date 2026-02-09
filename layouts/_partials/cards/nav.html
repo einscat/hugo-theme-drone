@@ -1,0 +1,52 @@
+{{ $site := .Site.Params }}
+
+<div class="card card-nav">
+
+    <a href="/" class="flex items-center gap-3 mb-1 px-2 py-2 group">
+        <img src="{{ $site.meta.logo | default "/images/avatar.png" }}"
+        alt="avatar"
+        class="w-10 h-10 rounded-full object-cover transition-transform group-hover:scale-105"
+        style="box-shadow: 0 12px 20px -5px #E2D9CE;"
+        />
+        <div class="flex flex-col items-start">
+            <span class="font-averia text-2xl font-medium leading-none text-primary">
+                {{ $site.meta.title | default "My Site" }}
+            </span>
+            <span class="text-brand text-xs font-medium mt-1">
+                {{ $site.meta.description | default "Keep Going" }}
+            </span>
+        </div>
+    </a>
+
+    <div class="mx-4 my-3 h-px bg-black/5"></div>
+
+    <nav id="nav-container" class="relative flex flex-col gap-2 w-full">
+
+        <div id="nav-cursor" class="nav-cursor"></div>
+
+        {{ range $index, $item := .Site.Menus.main }}
+        <a
+                href="{{ .URL }}"
+                class="nav-item relative z-10 flex items-center gap-3 w-full h-[52px] px-5 py-3 rounded-full group select-none transition-colors"
+                data-index="{{ $index }}"
+        >
+            <div class="relative w-7 h-7 flex items-center justify-center shrink-0">
+                <img
+                        src="/svgs/{{ .Params.icon }}-outline.svg"
+                        class="nav-icon-outline absolute w-full h-full object-contain transition-opacity duration-300 opacity-60"
+                        alt=""
+                />
+
+                <div
+                        class="nav-icon-filled-base"
+                        style="-webkit-mask-image: url('/svgs/{{ .Params.icon }}-filled.svg'); mask-image: url('/svgs/{{ .Params.icon }}-filled.svg');"
+                ></div>
+            </div>
+
+            <span class="nav-text text-base font-medium text-secondary transition-colors">
+                {{ .Name }}
+            </span>
+        </a>
+        {{ end }}
+    </nav>
+</div>
