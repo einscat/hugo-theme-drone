@@ -75,3 +75,19 @@
   animation: fade-in-up-scale 0.6s ease-out forwards;
   animation-delay: 0.1s; /* 第一个出场 */
 }
+
+/* Clock Card - 数字时钟 */
+.card-clock {
+  /* 尺寸与定位 */
+  width: 232px;
+  height: 132px;
+  /* 相对于中心点的偏移 */
+  left: 204px;
+  top: -224px;
+  padding: 0.5rem;
+
+  /* 动画 */
+  opacity: 0;
+  animation: fade-in-up-scale 0.6s ease-out forwards;
+  animation-delay: 0.3s; /* 延迟出场 */
+}

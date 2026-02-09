@@ -1,0 +1,23 @@
+<div class="card card-clock">
+  <div class="bg-secondary/20 rounded-[32px] flex h-full w-full cursor-pointer items-center justify-center gap-1 sm:gap-1.5 p-2 shadow-inner">
+
+    {{ partial "svg/digit.html" (dict "id" "clock-h1") }}
+    {{ partial "svg/digit.html" (dict "id" "clock-h2") }}
+
+    <div class="flex flex-col justify-center gap-2 h-[32px] sm:h-[52px]">
+      <div class="bg-primary h-1.5 w-1.5 rounded-full"></div>
+      <div class="bg-primary h-1.5 w-1.5 rounded-full"></div>
+    </div>
+
+    {{ partial "svg/digit.html" (dict "id" "clock-m1") }}
+    {{ partial "svg/digit.html" (dict "id" "clock-m2") }}
+
+    <div class="flex flex-col justify-center gap-2 h-[32px] sm:h-[52px]">
+      <div class="bg-primary h-1.5 w-1.5 rounded-full"></div>
+      <div class="bg-primary h-1.5 w-1.5 rounded-full"></div>
+    </div>
+
+    {{ partial "svg/digit.html" (dict "id" "clock-s1") }}
+    {{ partial "svg/digit.html" (dict "id" "clock-s2") }}
+  </div>
+</div>

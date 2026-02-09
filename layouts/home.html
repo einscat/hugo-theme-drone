@@ -3,7 +3,11 @@
   <div class="absolute left-1/2 top-1/2 z-10 w-0 h-0">
 
     {{ partial "cards/hi.html" . }}
+    {{ partial "cards/clock.html" . }}
 
   </div>
 </div>
+
+{{ $clockJs := resources.Get "js/clock.js" | js.Build (dict "Minify" true) | resources.Fingerprint }}
+<script src="{{ $clockJs.RelPermalink }}" defer></script>
 {{ end }}
