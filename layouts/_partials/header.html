@@ -1,2 +1,160 @@
-<h1>{{ site.Title }}</h1>
-{{ partial "menu.html" (dict "menuID" "main" "page" .) }}
+{{ $site := .Site.Params }}
+{{ $currentUrl := .RelPermalink }}
+{{ $currentSection := .Section }}
+
+<header class="relative mx-auto mt-5 w-[94%] max-w-[1100px] h-[68px] z-50
+               flex items-center justify-between px-2 pl-6 pr-2
+               bg-card border border-white/60 rounded-full
+               backdrop-blur-[12px]
+               shadow-[0_40px_50px_-32px_rgba(0,0,0,0.05),inset_0_0_20px_rgba(255,255,255,0.25)]
+               transition-all duration-300">
+
+    <a href="/" class="flex items-center gap-3 group no-underline text-primary shrink-0 mr-8">
+        <img
+                src="{{ $site.meta.logo | default "/images/avatar.png" }}"
+        alt="Logo"
+        class="w-10 h-10 rounded-full object-cover shadow-sm transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6"
+        />
+        <div class="flex flex-col">
+            <span class="font-averia text-lg font-bold tracking-wide leading-none group-hover:text-brand transition-colors">
+                {{ $site.meta.username }}
+            </span>
+            <span class="text-[10px] text-secondary font-medium tracking-wider hidden sm:block opacity-60 mt-0.5">
+                {{ $site.meta.description | truncate 20 }}
+            </span>
+        </div>
+    </a>
+
+    <nav id="header-nav-container" class="relative flex items-center p-1">
+
+        <div id="header-cursor"
+             class="absolute top-1 bottom-1 rounded-full z-0 pointer-events-none opacity-0 transition-all duration-300 ease-[cubic-bezier(0.25,1,0.5,1)]"
+             style="background-image: linear-gradient(to right bottom, var(--color-border) 60%, var(--color-card) 100%);
+                    box-shadow: 0 2px 10px rgba(0,0,0,0.05), inset 0 0 0 1px rgba(255,255,255,0.2);">
+        </div>
+
+        {{ range .Site.Menus.main }}
+
+        {{/* --- 高亮匹配逻辑 --- */}}
+        {{ $isExact := eq $currentUrl .URL }}
+        {{ $isPrefix := and (ne .URL "/") (hasPrefix $currentUrl .URL) }}
+
+        {{/* Section 匹配: 只要属于同一个版块就高亮 */}}
+        {{ $isSectionMatch := false }}
+        {{ if and $currentSection (ne .URL "/") }}
+        {{ $sectionPath := printf "/%s" $currentSection }}
+        {{ if hasPrefix .URL $sectionPath }}
+        {{ $isSectionMatch = true }}
+        {{ end }}
+        {{ end }}
+
+        {{ $isActive := or $isExact $isPrefix $isSectionMatch }}
+
+        <a href="{{ .URL }}"
+           class="header-nav-item relative z-10 flex items-center gap-2 px-5 py-2.5 rounded-full transition-colors duration-300 group select-none whitespace-nowrap bg-transparent"
+           data-active="{{ if $isActive }}true{{ end }}">
+
+            <div class="relative w-4 h-4 shrink-0">
+                <img
+                        src="/svgs/{{ .Params.icon | default "about" }}-outline.svg"
+                class="header-icon-outline absolute inset-0 w-full h-full object-contain transition-opacity duration-300 opacity-70
+                {{ if $isActive }}opacity-0{{ end }}"
+                />
+
+                <div class="header-icon-filled absolute inset-0 bg-brand transition-opacity duration-300 opacity-0
+                                {{ if $isActive }}opacity-100{{ end }}"
+                     style="-webkit-mask-image: url('/svgs/{{ .Params.icon | default "about" }}-filled.svg'); mask-image: url('/svgs/{{ .Params.icon | default "about" }}-filled.svg'); mask-size: contain; mask-repeat: no-repeat; mask-position: center;">
+            </div>
+            </div>
+
+            <span class="header-nav-text text-sm font-medium text-secondary/80 transition-colors duration-300
+                             {{ if $isActive }}text-primary font-bold{{ end }}">
+                    {{ .Name }}
+                </span>
+        </a>
+        {{ end }}
+    </nav>
+</header>
+
+<script>
+    (function() {
+        const navContainer = document.getElementById('header-nav-container');
+        const cursor = document.getElementById('header-cursor');
+        const items = document.querySelectorAll('.header-nav-item');
+
+        if (!navContainer || !cursor || items.length === 0) return;
+
+        let activeItem = null;
+
+        // 找到当前激活项
+        items.forEach(item => {
+            if (item.getAttribute('data-active') === 'true') {
+                activeItem = item;
+            }
+        });
+
+        function moveCursorTo(item) {
+            if (!item) {
+                cursor.style.opacity = '0';
+                return;
+            }
+            const left = item.offsetLeft;
+            const width = item.offsetWidth;
+            cursor.style.width = `${width}px`;
+            cursor.style.transform = `translateX(${left}px)`;
+            cursor.style.opacity = '1';
+        }
+
+        function updateVisuals(hoverItem) {
+            items.forEach(item => {
+                const isHovered = item === hoverItem;
+                const isActiveOriginal = item === activeItem;
+                const outline = item.querySelector('.header-icon-outline');
+                const filled = item.querySelector('.header-icon-filled');
+                const text = item.querySelector('.header-nav-text');
+
+                // 显示激活状态的条件：正在 hover 该项，或者（没有 hover 任何项 且 该项原本就是激活的）
+                const showActiveState = isHovered || (!hoverItem && isActiveOriginal);
+
+                if (showActiveState) {
+                    if(outline) outline.style.opacity = '0';
+                    if(filled) filled.style.opacity = '1';
+                    if(text) {
+                        text.style.color = 'var(--color-primary, #4E3F42)';
+                        text.style.fontWeight = '700';
+                    }
+                } else {
+                    if(outline) outline.style.opacity = '0.7';
+                    if(filled) filled.style.opacity = '0';
+                    if(text) {
+                        text.style.color = '';
+                        text.style.fontWeight = '500';
+                    }
+                }
+            });
+        }
+
+        // 初始化
+        setTimeout(() => {
+            if (activeItem) moveCursorTo(activeItem);
+        }, 50);
+
+        // 事件监听
+        items.forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                moveCursorTo(item);
+                updateVisuals(item);
+            });
+            // 点击时更新 activeItem，防止点击后光标跳回原处
+            item.addEventListener('click', () => {
+                activeItem = item;
+                moveCursorTo(item);
+            });
+        });
+
+        navContainer.addEventListener('mouseleave', () => {
+            moveCursorTo(activeItem);
+            updateVisuals(null);
+        });
+    })();
+</script>

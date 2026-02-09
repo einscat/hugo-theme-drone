@@ -260,3 +260,29 @@
   color: var(--color-brand) !important;
   font-weight: 700;
 }
+
+/* =========================================
+   Header 导航样式
+   ========================================= */
+
+/* 确保 mask 图标的填充色能正常工作 */
+.header-icon-filled {
+  background-color: var(--color-brand);
+}
+
+/* 选中状态下的文字强调 */
+.header-nav-item[data-active="true"] .header-nav-text {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+/* 移动端/窄屏下的响应式调整 */
+@media (max-width: 640px) {
+  header {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+  .header-nav-text {
+    display: none; /* 手机端只显示图标，节省空间 */
+  }
+}
