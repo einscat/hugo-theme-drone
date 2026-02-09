@@ -1,10 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{{/* 接收参数:
+- data: .Data.Terms (Hugo 的有序分类列表)
+- type: "category" 或 "tag" (用于显示不同图标)
+*/}}
+
+{{ $data := .data }}
+{{ $type := .type }}
+
+{{ if $data }}
+<div class="flex flex-wrap gap-3 justify-center content-start py-8 font-sans animate-fade-in-up">
+  {{ range $data }}
+
+  <a href="{{ .Page.RelPermalink }}"
+     class="group relative inline-flex items-center gap-1.5 px-4 py-2
+              bg-white/50 hover:bg-white border border-white/60 hover:border-white 
+              rounded-full transition-all duration-300 hover:shadow-md hover:-translate-y-0.5 
+              text-primary no-underline backdrop-blur-md">
+
+        <span class="text-brand/50 group-hover:text-brand transition-colors text-sm font-normal">
+            {{ if eq $type "category" }}#{{ else }}🏷{{ end }}
+        </span>
+
+    <span class="text-sm font-medium tracking-wide text-primary/90 group-hover:text-brand transition-colors">
+            {{ .Page.Title }}
+        </span>
+
+    <span class="ml-0.5 text-[11px] text-secondary/60 group-hover:text-brand/60 transition-colors font-medium">
+            {{ .Count }}
+        </span>
+
+  </a>
+  {{ end }}
+</div>
+{{ else }}
+<div class="flex flex-col items-center justify-center py-20 opacity-40">
+  <div class="text-3xl mb-2 grayscale">💨</div>
+  <div class="text-sm text-secondary tracking-widest">NO DATA</div>
+</div>
+{{ end }}
