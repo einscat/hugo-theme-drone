@@ -1,0 +1,14 @@
+<div class="card card-calendar">
+  <h3 id="calendar-title" class="text-secondary text-sm font-medium pl-1 tracking-wide">
+    Loading...
+  </h3>
+
+  <ul id="calendar-grid" class="calendar-grid text-secondary text-sm">
+  </ul>
+</div>
+
+{{ $calJs := resources.Get "js/calendar.js" }}
+{{ if $calJs }}
+{{ $calJs = $calJs | js.Build (dict "Minify" true) | resources.Fingerprint }}
+<script src="{{ $calJs.RelPermalink }}" defer></script>
+{{ end }}
