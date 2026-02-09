@@ -1,0 +1,70 @@
+{{ define "main" }}
+
+<div class="h-screen w-full bg-bg flex flex-col overflow-hidden">
+
+  <div class="flex-none z-50 py-4 w-full relative">
+    {{ partial "header.html" . }}
+  </div>
+
+  <div class="flex-1 w-full flex flex-col items-center overflow-hidden">
+
+    <div class="w-full max-w-5xl h-full flex flex-col px-4 sm:px-8">
+
+      <div class="flex-none z-40 reading-fixed-header">
+
+        {{ if .Params.reading_nav }}
+        <nav class="reading-sub-nav">
+          {{ $currentURL := .RelPermalink }}
+          {{ range $index, $item := .Params.reading_nav }}
+
+          {{/* 分隔点 (第一个元素前不加) */}}
+          {{ if ne $index 0 }}<span class="separator">·</span>{{ end }}
+
+          {{/* 简单的当前页匹配高亮 */}}
+          {{ $isActive := eq $currentURL $item.url }}
+          <a href="{{ $item.url }}" class="{{ if $isActive }}active{{ end }}">
+            {{ $item.title }}
+          </a>
+          {{ end }}
+        </nav>
+        {{ end }}
+
+        <hr class="reading-divider">
+
+        {{ if .Params.quote }}
+        <blockquote class="reading-quote">
+          {{ .Params.quote }}
+        </blockquote>
+        {{ end }}
+
+      </div>
+
+      <div class="flex-1 w-full overflow-y-auto no-scrollbar scroll-smooth">
+        <article class="reading-content mx-auto animate-fade-in-up reading-scroll-area
+                       prose max-w-none
+                       prose-headings:font-bold prose-headings:text-[var(--color-primary)]
+                       prose-p:text-[var(--color-primary)] prose-p:opacity-90
+                       prose-a:text-[var(--color-brand)] hover:prose-a:underline
+                       prose-strong:text-[var(--color-primary)]
+                       prose-blockquote:border-l-4 prose-blockquote:border-[var(--color-brand)] prose-blockquote:text-[var(--color-primary)]
+                       prose-img:rounded-xl prose-img:shadow-md">
+          {{ .Content }}
+        </article>
+
+        <div class="h-24"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<style>
+  .animate-fade-in-up {
+    animation: fadeInUp 0.5s ease-out forwards;
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+{{ end }}
