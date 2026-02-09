@@ -1,0 +1,36 @@
+{{/* 接收分页器对象作为上下文 (.) */}}
+{{ $pag := . }}
+
+{{ if gt $pag.TotalPages 1 }}
+<div class="flex justify-center mt-16 pb-10 animate-fade-in-up" style="animation-delay: 0.1s;">
+    <nav class="inline-flex items-center p-2 bg-white/60 backdrop-blur-md border border-white/60 rounded-full shadow-sm gap-2">
+
+        {{/* 上一页 */}}
+        {{ if $pag.HasPrev }}
+        <a href="{{ $pag.Prev.URL }}" aria-label="Previous" class="w-10 h-10 flex items-center justify-center rounded-full bg-white text-secondary hover:text-brand hover:shadow-md transition-all duration-200">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+        </a>
+        {{ else }}
+        <span class="w-10 h-10 flex items-center justify-center rounded-full text-black/20 cursor-not-allowed">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+        </span>
+        {{ end }}
+
+        {{/* 页码指示 */}}
+        <span class="px-4 text-sm font-bold text-primary font-averia select-none">
+            {{ $pag.PageNumber }} / {{ $pag.TotalPages }}
+        </span>
+
+        {{/* 下一页 */}}
+        {{ if $pag.HasNext }}
+        <a href="{{ $pag.Next.URL }}" aria-label="Next" class="w-10 h-10 flex items-center justify-center rounded-full bg-white text-secondary hover:text-brand hover:shadow-md transition-all duration-200">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+        </a>
+        {{ else }}
+        <span class="w-10 h-10 flex items-center justify-center rounded-full text-black/20 cursor-not-allowed">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+        </span>
+        {{ end }}
+    </nav>
+</div>
+{{ end }}

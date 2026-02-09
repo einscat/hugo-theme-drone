@@ -1,0 +1,13 @@
+<a href="{{ .RelPermalink }}" class="block group">
+  <div class="flex items-center justify-between bg-white/40 hover:bg-white border border-white/50 hover:border-white rounded-xl px-5 py-3 transition-all duration-200 hover:shadow-sm">
+    <div class="flex items-center gap-4 overflow-hidden">
+      <span class="font-mono text-sm text-secondary/70 shrink-0">{{ .Date.Format "2006-01-02" }}</span>
+      <span class="w-px h-3 bg-black/10 shrink-0"></span>
+      <span class="font-medium text-primary truncate group-hover:text-brand transition-colors">{{ .Title }}</span>
+    </div>
+
+    <div class="text-[10px] font-bold px-2 py-1 rounded bg-black/5 text-secondary group-hover:bg-brand group-hover:text-white transition-colors shrink-0">
+      {{ replace (.Date.Format "Mon") "Mon" "周一" | replaceRE "Tue" "周二" | replaceRE "Wed" "周三" | replaceRE "Thu" "周四" | replaceRE "Fri" "周五" | replaceRE "Sat" "周六" | replaceRE "Sun" "周日" }}
+    </div>
+  </div>
+</a>

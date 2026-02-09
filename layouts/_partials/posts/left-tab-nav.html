@@ -1,0 +1,67 @@
+{{/* 左侧导航：使用 href 跳转实现路由分离 */}}
+
+{{/* 判断当前高亮状态 */}}
+{{ $isDeepPage := or .IsPage (eq .Kind "term") }}
+{{ $isPosts := or (eq .Section "posts") (eq .Type "posts") }}
+{{ $isCategories := eq .Section "categories" }}
+{{ $isTags := eq .Section "tags" }}
+{{ $isSearch := eq .Section "search" }}
+
+<div class="hidden xl:flex fixed left-1/2 -ml-[36.5rem] top-40 z-40 flex-col items-end">
+    <aside class="flex flex-col items-center gap-2 p-2 rounded-full
+          bg-white/60 border border-white/60 backdrop-blur-xl
+          shadow-[0_8px_30px_rgba(0,0,0,0.04)] transition-all relative pointer-events-auto">
+
+        {{ if $isDeepPage }}
+        {{/* 详情页/具体分类页：显示返回按钮 */}}
+        <a href="{{ "/posts/" | relLangURL }}"
+        class="side-tab group relative z-10 w-11 h-11 flex items-center justify-center
+        text-secondary rounded-full transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)]
+        hover:text-brand hover:bg-brand/10 hover:scale-110 hover:shadow-sm"
+        title="Return">
+        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        </a>
+
+        {{ else }}
+        {{/* 列表页/总览页：显示导航链接 */}}
+
+        {{/* 1. Year -> 跳转 /posts/ (使用 list.html) */}}
+        <a href="{{ "/posts/" | relLangURL }}"
+        class="side-tab {{ if $isPosts }}active{{ end }} group relative z-10 w-11 h-11 flex items-center justify-center text-secondary rounded-full transition-all duration-300 hover:text-brand"
+        title="Year">
+        <span class="font-averia font-bold text-sm">Year</span>
+        </a>
+
+        <div class="w-6 h-px bg-black/5 my-1"></div>
+
+        {{/* 2. Categories -> 跳转 /categories/ (使用 terms.html) */}}
+        <a href="{{ "/categories/" | relLangURL }}"
+        class="side-tab {{ if $isCategories }}active{{ end }} group relative z-10 w-11 h-11 flex items-center justify-center text-secondary rounded-full transition-all duration-300 hover:text-brand"
+        title="Categories">
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+        </a>
+
+        {{/* 3. Tags -> 跳转 /tags/ (使用 terms.html) */}}
+        <a href="{{ "/tags/" | relLangURL }}"
+        class="side-tab {{ if $isTags }}active{{ end }} group relative z-10 w-11 h-11 flex items-center justify-center text-secondary rounded-full transition-all duration-300 hover:text-brand"
+        title="Tags">
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+        </a>
+
+        {{/* 4. Search */}}
+        <a href="{{ "/search/" | relLangURL }}"
+        class="side-tab {{ if $isSearch }}active{{ end }} group relative z-10 w-11 h-11 flex items-center justify-center text-secondary rounded-full transition-all duration-300 hover:text-brand"
+        title="Search">
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        </a>
+
+        {{/* 游标跟随 */}}
+        <div id="sidebar-cursor" class="absolute left-2 top-0 w-11 h-11 rounded-full z-0 pointer-events-none opacity-0 transition-all duration-300 ease-[cubic-bezier(0.25,1,0.5,1)]"
+             style="background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.8) 100%); box-shadow: 0 4px 10px rgba(0,0,0,0.1), inset 0 0 0 1px rgba(255,255,255,0.6);">
+        </div>
+        {{ end }}
+    </aside>
+</div>
