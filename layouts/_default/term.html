@@ -1,0 +1,67 @@
+{{ define "main" }}
+<div class="h-screen w-full bg-bg flex flex-col overflow-hidden">
+  {{/* Header */}}
+  <div class="flex-none z-50 py-4 w-full relative">
+    {{ partial "header.html" . }}
+  </div>
+
+  {{/* 左侧侧边栏 */}}
+  {{ partial "posts/left-tab-nav.html" . }}
+
+  <div class="flex-1 w-full relative overflow-hidden">
+    <div id="scroll-container" class="absolute inset-0 w-full h-full overflow-y-auto no-scrollbar scroll-smooth pt-2 pb-24">
+
+      {{/* 移动端: 返回按钮 */}}
+      <div class="md:hidden sticky top-0 z-30 flex justify-center pb-6 pointer-events-none">
+        <div class="inline-flex items-center p-1.5 bg-white/80 rounded-full backdrop-blur-xl border border-white/50 shadow-sm pointer-events-auto">
+          {{ $backUrl := "/categories/" | relLangURL }}
+          {{ if eq .Data.Singular "tag" }}{{ $backUrl = "/tags/" | relLangURL }}{{ end }}
+
+          <a href="{{ $backUrl }}" class="px-4 py-1.5 font-bold text-brand no-underline flex items-center gap-1 text-sm hover:opacity-80 transition-opacity">
+            <span>←</span> <span>Back</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="w-full max-w-5xl mx-auto px-4 sm:px-8">
+        <div class="relative min-h-[400px]">
+
+          {{/* 标题区域 */}}
+          <div class="mb-10 text-center animate-fade-in-up mt-8">
+            <span class="inline-block px-5 py-2 rounded-full bg-brand/5 text-brand font-bold text-2xl border border-brand/10 font-averia">
+                {{ if eq .Data.Singular "category" }}#{{ else }}🏷{{ end }} {{ .Title }}
+            </span>
+            <p class="text-secondary/50 text-sm mt-2 font-mono">{{ len .Pages }} Posts</p>
+          </div>
+
+          {{/* 文章列表 (复用 List 样式) */}}
+          <div class="view-section">
+            <div class="grid gap-10">
+              {{ $paginator := .Paginate .Pages }}
+
+              {{ range $paginator.Pages.GroupByDate "2006" }}
+              <div class="relative pl-8 border-l-2 border-dashed border-black/5">
+                <span class="absolute -left-[9px] top-2 w-4 h-4 rounded-full bg-brand/20 border-2 border-white box-content"></span>
+                <h3 class="text-3xl font-black text-primary/80 mb-6 font-averia flex items-center gap-3">
+                  {{ .Key }}
+                  <span class="text-xs font-normal text-secondary bg-white/50 px-2 py-0.5 rounded-full border border-white/50">{{ len .Pages }}</span>
+                </h3>
+                <div class="grid gap-3">
+                  {{ range .Pages }}
+                  {{ partial "posts/post-card-row.html" . }}
+                  {{ end }}
+                </div>
+              </div>
+              {{ end }}
+            </div>
+
+            {{ partial "posts/pagination.html" $paginator }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{{ $js := resources.Get "js/list.js" | js.Build (dict "Minify" true) | resources.Fingerprint }}
+<script src="{{ $js.RelPermalink }}" defer></script>
+{{ end }}
