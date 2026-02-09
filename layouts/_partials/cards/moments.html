@@ -1,0 +1,17 @@
+{{/* 读取配置 */}}
+{{ $photoUrl := .Site.Params.home_photo_url | default "/images/default-photo.jpg" }}
+
+<a href="/journey/moments" class="card card-moments group block">
+
+  <div class="relative w-full h-full rounded-[24px] overflow-hidden cursor-pointer">
+
+    <img
+            src="{{ $photoUrl }}"
+            alt="Moments"
+            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+    />
+
+    <div class="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300"></div>
+
+  </div>
+</a>

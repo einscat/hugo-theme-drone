@@ -91,3 +91,21 @@
   animation: fade-in-up-scale 0.6s ease-out forwards;
   animation-delay: 0.3s; /* 延迟出场 */
 }
+
+/* Photo Card - 照片墙入口 (原 Art Card) */
+.card-moments {
+  /* 尺寸 */
+  width: 360px;
+  height: 200px;
+
+  /* 定位：水平居中 (left -180px)，垂直位于 Hi Card 上方 */
+  left: -180px;
+  top: -380px;
+
+  padding: 0.5rem;
+
+  /* 动画 */
+  opacity: 0;
+  animation: fade-in-up-scale 0.6s ease-out forwards;
+  animation-delay: 0.2s; /* 第二个出场 */
+}

@@ -13,7 +13,10 @@ theme = 'hugo-theme-drone'
     keywords = ["Hugo", "theme","drone"]
     description = "遥望未来，一片混沌，行知路，虽千万里，吾往矣"
 
-    [params.meta]
+    # 首页 Photo Card 展示的图片路径
+    home_photo_url = "/images/cat.png"
+
+[params.meta]
         username = "Y"
         avatar = "/images/avatar.png"
         description = "活死人の行知路..."
