@@ -35,20 +35,39 @@
 
         {{ range .Site.Menus.main }}
 
-        {{/* --- 高亮匹配逻辑 --- */}}
+        {{/* --- 高亮匹配逻辑 (Revised) --- */}}
+
+        {{/* 1. 基础匹配: URL 完全相等 或 前缀匹配 */}}
         {{ $isExact := eq $currentUrl .URL }}
         {{ $isPrefix := and (ne .URL "/") (hasPrefix $currentUrl .URL) }}
 
-        {{/* Section 匹配: 只要属于同一个版块就高亮 */}}
+        {{/* 2. Section 匹配: 只要属于同一个版块就高亮 */}}
         {{ $isSectionMatch := false }}
         {{ if and $currentSection (ne .URL "/") }}
-        {{ $sectionPath := printf "/%s" $currentSection }}
-        {{ if hasPrefix .URL $sectionPath }}
-        {{ $isSectionMatch = true }}
-        {{ end }}
+            {{/* 尝试构建 Section 路径进行比对 */}}
+            {{ $sectionPath := printf "/%s" $currentSection }}
+            {{ if hasPrefix .URL $sectionPath }}
+                {{ $isSectionMatch = true }}
+            {{ end }}
         {{ end }}
 
-        {{ $isActive := or $isExact $isPrefix $isSectionMatch }}
+        {{/* 3. 聚合高亮 (强制修正版) */}}
+        {{/* 步骤 A: 定义哪些页面属于“博客内容”范畴 (Categories, Tags, Search, Posts) */}}
+        {{/* 使用 'in' 检查 /search/ 防止多语言路径问题，Section 检查确保覆盖分类和标签页 */}}
+        {{ $isBlogContext := false }}
+        {{ if or (eq $currentSection "posts") (eq $currentSection "categories") (eq $currentSection "tags") (in $currentUrl "search") }}
+            {{ $isBlogContext = true }}
+        {{ end }}
+
+        {{/* 步骤 B: 识别当前菜单项是否是“文章”入口 */}}
+        {{/* 只要菜单链接中包含 "/posts"，我们就认定它是文章主菜单 (兼容 /posts 和 /posts/) */}}
+        {{ $isPostsMenu := in .URL "/posts" }}
+
+        {{/* 步骤 C: 如果是文章菜单 且 当前处于博客范畴，强制激活 */}}
+        {{ $isAggregated := and $isPostsMenu $isBlogContext }}
+
+        {{/* 最终激活状态 */}}
+        {{ $isActive := or $isExact $isPrefix $isSectionMatch $isAggregated }}
 
         <a href="{{ .URL }}"
            class="header-nav-item relative z-10 flex items-center gap-2 px-5 py-2.5 rounded-full transition-colors duration-300 group select-none whitespace-nowrap bg-transparent"
