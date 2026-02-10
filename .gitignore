@@ -8,5 +8,6 @@ exampleSite/content/
 .hugo_build.lock
 public/
 resources/
+assets/css/compiled.css
 
 node_modules/
