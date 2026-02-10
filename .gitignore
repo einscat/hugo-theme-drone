@@ -5,5 +5,8 @@ exampleSite/.hugo_build.lock
 exampleSite/public/
 exampleSite/resources/
 exampleSite/content/
+.hugo_build.lock
+public/
+resources/
 
 node_modules/
