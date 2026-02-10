@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths-ignore:
-      - 'assets/css/compiled.css'     # 防止 push compiled.css 再次触发 workflow
+      - 'assets/css/compiled.css'
 
 permissions:
   contents: write
@@ -22,19 +22,19 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install deps
+      - name: Install dependencies
         run: npm ci
 
-      - name: Build Tailwind
+      - name: Build Tailwind CSS
         run: npm run build:css
 
-      - name: Commit & Push if changed
+      - name: Commit & Push compiled.css if changed
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore: auto build tailwindcss [ci skip]"
           file_pattern: assets/css/compiled.css
           skip_fetch: true
           skip_checkout: true
-          commit_user_name: GitHub Actions
-          commit_user_email: actions@github.com
-          commit_author: GitHub Actions <actions@github.com>
+          commit_user_name: github-actions[bot]
+          commit_user_email: github-actions[bot]@users.noreply.github.com
+          commit_author: github-actions[bot] <github-actions[bot]@users.noreply.github.com>
