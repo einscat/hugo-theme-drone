@@ -1,12 +1,14 @@
-{{/* 获取 assets/css/main.css 资源 */}}
-{{ $css := resources.Get "css/main.css" }}
+<!-- 获取 assets/css/main.css 资源 -->
+{{ $css := resources.Get "css/compiled.css" }}
 
-{{/* 通过 PostCSS 处理 (Hugo v0.128+ 使用 css.PostCSS) */}}
-{{ $css = $css | css.PostCSS }}
+{{ if not $css }}
+<!-- 通过 PostCSS 处理 (Hugo v0.128+ 使用 css.PostCSS) -->
+{{ $css = resources.Get "css/main.css" | css.PostCSS }}
+{{ end }}
 
-{{/* 如果是生产环境，进行压缩和指纹处理 */}}
+<!-- 如果是生产环境，进行压缩和指纹处理 -->
 {{ if hugo.IsProduction }}
-  {{ $css = $css | minify | fingerprint }}
+{{ $css = $css | minify | fingerprint }}
 {{ end }}
 
 <link rel="stylesheet" href="{{ $css.RelPermalink }}">
