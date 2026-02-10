@@ -1358,83 +1358,129 @@
   font-weight: 500;
 }
 
-/* --- 10.4 正文排版与代码块 (Typography) --- */
+/* --- 10.4 正文排版与代码块 (Typography - Ubuntu Terminal Final Clean) --- */
 
 .layout-content {
   width: 100%;
-  /* 注意：single.html 中已经通过 Tailwind 的 'prose' 类处理了大部分排版。
-     这里主要处理代码块的深度定制。
-  */
 }
 
-/* [核心修复] 彻底隐藏 Tailwind Typography 自带的反引号 */
+/* 隐藏干扰元素 */
 .layout-content :where(code)::before,
 .layout-content :where(code)::after {
   content: none !important;
   display: none;
 }
 
-/* 代码块外层容器 (JS生成) */
+/* 1. 代码块外层容器 (唯一的背景色来源) */
 .code-block-wrapper {
-  margin: 1.5em 0;
-  border: 1px solid rgba(0,0,0,0.06); /* 极淡边框 */
-  border-radius: 8px;
+  margin: 16px 0;
+  border-radius: 6px;
   overflow: hidden;
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  background-color: #300a24; /* [核心] 只有这里设置背景色 */
+  border: 1px solid rgba(0, 0, 0, 0.6);
+  font-family: 'Ubuntu Mono', 'Consolas', 'Monaco', monospace;
 }
 
-/* 代码块头部 (Mac 窗口风格) */
+/* 2. 代码块头部 */
 .code-block-header {
   display: flex;
   align-items: center;
-  padding: 8px 16px;
-  background-color: #f8f9fa; /* 极淡灰 */
-  border-bottom: 1px solid rgba(0,0,0,0.06);
+  padding: 0 12px;
+  height: 36px;
+  background: linear-gradient(to bottom, #4c4c4c, #3a3a3a);
+  border-bottom: 1px solid #111;
   user-select: none;
+}
+
+/* 窗口按钮 */
+.code-block-header::before {
+  content: '';
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #df4b16;
+  box-shadow:
+          18px 0 0 #888,
+          36px 0 0 #888;
+  margin-right: 42px;
 }
 
 /* 语言标识 */
 .code-block-header span {
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--color-secondary);
+  font-family: 'Ubuntu Mono', monospace;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #fdf6e3;
+  opacity: 0.9;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 /* 复制按钮 */
 .code-copy-btn {
   margin-left: auto;
-  border: 1px solid rgba(0,0,0,0.1);
-  background-color: #fff;
-  color: var(--color-primary);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: transparent;
+  color: #aaa;
   cursor: pointer;
-  padding: 2px 10px;
+  padding: 2px 8px;
   font-size: 0.7rem;
-  border-radius: 4px;
+  border-radius: 3px;
   transition: all 0.2s;
-  font-weight: 500;
 }
 
 .code-copy-btn:hover {
-  background-color: var(--color-brand);
+  background-color: #E95420;
   color: #fff;
-  border-color: var(--color-brand);
+  border-color: #E95420;
 }
 
-/* 代码内容区域 */
+/* 3. 代码内容区域 (透明背景) */
 .layout-content pre {
   margin: 0 !important;
-  padding: 16px !important;
+  /* [修改点] 背景色设为透明，消除“双重背景”导致的缝隙 */
+  background-color: transparent !important;
+  /* 保持极小的内边距，防止文字贴边 */
+  padding: 8px 12px !important;
+
   border-radius: 0 !important;
-  background-color: transparent !important; /* 背景由 wrapper 接管 */
-  color: #24292e !important;
-  font-family: "JetBrains Mono", Consolas, Menlo, monospace;
-  font-size: 0.875rem;
-  line-height: 1.6;
+  color: #fdf6e3 !important;
+  font-family: "Ubuntu Mono", "JetBrains Mono", Consolas, monospace;
+  font-size: 0.9rem;
+  line-height: 1.5;
   overflow-x: auto;
 }
 
+/* 确保内部 code 也是透明的 */
+.layout-content pre code {
+  background-color: transparent !important; /* [修改点] 透明 */
+  display: block;
+  padding: 0 !important;
+  margin: 0 !important;
+  min-width: 100%;
+}
+
+/* 4. 滚动条 (轨道颜色需保持与外层背景一致) */
+.layout-content pre::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+
+.layout-content pre::-webkit-scrollbar-track {
+  background: #300a24; /* 轨道颜色 = Wrapper背景色 */
+}
+
+.layout-content pre::-webkit-scrollbar-thumb {
+  background-color: #5E2750;
+  border-radius: 0;
+  border: none;
+}
+
+.layout-content pre::-webkit-scrollbar-thumb:hover {
+  background-color: #E95420;
+}
 /* --- 10.5 右侧目录 (Right TOC Sidebar) --- */
 .right-toc-nav {
   display: none; /* 默认隐藏，小屏不显示 */

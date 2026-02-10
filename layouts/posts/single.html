@@ -57,30 +57,75 @@
 </div>
 
 <script>
-  // 保持原有 Script 不变
   document.addEventListener('DOMContentLoaded', function() {
     const scrollContainer = document.getElementById('scroll-container');
 
-    // 代码块复制逻辑 (不变)
+    // 1. 深度清理函数：移除代码块视觉上的首尾空行
+    function trimCodeBlock(codeElement) {
+      // 清理头部空文本节点
+      let first = codeElement.firstChild;
+      while (first && first.nodeType === Node.TEXT_NODE && /^\s*$/.test(first.textContent)) {
+        let next = first.nextSibling;
+        codeElement.removeChild(first);
+        first = next;
+      }
+      // 清理头部剩余的换行符
+      if (first && first.nodeType === Node.TEXT_NODE) {
+        first.textContent = first.textContent.replace(/^\n+/, '');
+      }
+
+      // 清理尾部空文本节点
+      let last = codeElement.lastChild;
+      while (last && last.nodeType === Node.TEXT_NODE && /^\s*$/.test(last.textContent)) {
+        let prev = last.previousSibling;
+        codeElement.removeChild(last);
+        last = prev;
+      }
+      // 清理尾部剩余的换行符
+      if (last && last.nodeType === Node.TEXT_NODE) {
+        last.textContent = last.textContent.replace(/\n+$/, '');
+      }
+    }
+
+    // 2. 遍历并处理所有代码块
     document.querySelectorAll('pre').forEach((pre) => {
-      let lang = 'TEXT';
       const code = pre.querySelector('code');
+
+      // 执行视觉清理
+      if (code) trimCodeBlock(code);
+
+      // 获取语言类型
+      let lang = 'TEXT';
       if (code && code.className) {
         const match = code.className.match(/language-(\w+)/);
         if (match) lang = match[1].toUpperCase();
       }
+
+      // 避免重复处理
+      if (pre.parentNode.classList.contains('code-block-wrapper')) return;
+
+      // 创建 Ubuntu 风格容器
       const wrapper = document.createElement('div');
       wrapper.className = 'code-block-wrapper';
+
       const header = document.createElement('div');
       header.className = 'code-block-header';
       header.innerHTML = `<span>${lang}</span><button class="code-copy-btn"><span>Copy</span></button>`;
+
       pre.parentNode.insertBefore(wrapper, pre);
       wrapper.appendChild(header);
       wrapper.appendChild(pre);
 
+      // 3. 复制逻辑 [核心修改：解决换行问题]
       header.querySelector('.code-copy-btn').addEventListener('click', function() {
         const btn = this;
-        const text = code ? code.textContent : pre.textContent;
+        // 使用 textContent 获取纯文本
+        let text = code ? code.textContent : pre.textContent;
+
+        // [关键] 使用 .trim() 方法彻底去除字符串首尾的空白和换行符
+        // 这确保了粘贴出来的内容不会多出一行
+        text = text.trim();
+
         navigator.clipboard.writeText(text).then(() => {
           btn.innerHTML = `<span style="color:#10b981">Copied!</span>`;
           setTimeout(() => { btn.innerHTML = `<span>Copy</span>`; }, 2000);
@@ -88,30 +133,25 @@
       });
     });
 
-    // 目录高亮逻辑 (不变)
+    // 4. 目录高亮逻辑 (保持原样)
     const tocLinks = document.querySelectorAll('.sidebar-toc a');
     const headings = document.querySelectorAll('.layout-content h2, .layout-content h3, .layout-content h4');
-
     if (tocLinks.length > 0 && headings.length > 0) {
       const observerOptions = {
         root: scrollContainer,
-        rootMargin: '-100px 0px -70% 0px', // 调整了视口检测区域，适应滚动标题
+        rootMargin: '-100px 0px -70% 0px',
         threshold: 0
       };
-
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
             const id = entry.target.getAttribute('id');
             tocLinks.forEach(link => link.classList.remove('active'));
             const activeLink = document.querySelector(`.sidebar-toc a[href="#${id}"]`);
-            if (activeLink) {
-              activeLink.classList.add('active');
-            }
+            if (activeLink) activeLink.classList.add('active');
           }
         });
       }, observerOptions);
-
       headings.forEach(heading => observer.observe(heading));
     }
   });
