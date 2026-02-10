@@ -27,6 +27,8 @@
 
     <nav id="header-nav-container" class="relative flex items-center p-1">
 
+        {{/* 注意：这里移除了 opacity-0，改为默认 opacity-1，但依靠 JS 瞬间定位防止闪烁。
+        如果 JS 尚未执行，该光标会因为 width 无效而不可见，这是安全的。 */}}
         <div id="header-cursor"
              class="absolute top-1 bottom-1 rounded-full z-0 pointer-events-none opacity-0 transition-all duration-300 ease-[cubic-bezier(0.25,1,0.5,1)]"
              style="background-image: linear-gradient(to right bottom, var(--color-border) 60%, var(--color-card) 100%);
@@ -37,36 +39,28 @@
 
         {{/* --- 高亮匹配逻辑 (Revised) --- */}}
 
-        {{/* 1. 基础匹配: URL 完全相等 或 前缀匹配 */}}
+        {{/* 1. 基础匹配 */}}
         {{ $isExact := eq $currentUrl .URL }}
         {{ $isPrefix := and (ne .URL "/") (hasPrefix $currentUrl .URL) }}
 
-        {{/* 2. Section 匹配: 只要属于同一个版块就高亮 */}}
+        {{/* 2. Section 匹配 */}}
         {{ $isSectionMatch := false }}
         {{ if and $currentSection (ne .URL "/") }}
-            {{/* 尝试构建 Section 路径进行比对 */}}
-            {{ $sectionPath := printf "/%s" $currentSection }}
-            {{ if hasPrefix .URL $sectionPath }}
-                {{ $isSectionMatch = true }}
-            {{ end }}
+        {{ $sectionPath := printf "/%s" $currentSection }}
+        {{ if hasPrefix .URL $sectionPath }}
+        {{ $isSectionMatch = true }}
+        {{ end }}
         {{ end }}
 
-        {{/* 3. 聚合高亮 (强制修正版) */}}
-        {{/* 步骤 A: 定义哪些页面属于“博客内容”范畴 (Categories, Tags, Search, Posts) */}}
-        {{/* 使用 'in' 检查 /search/ 防止多语言路径问题，Section 检查确保覆盖分类和标签页 */}}
+        {{/* 3. 聚合高亮 (博客内容聚合到 Posts) */}}
         {{ $isBlogContext := false }}
         {{ if or (eq $currentSection "posts") (eq $currentSection "categories") (eq $currentSection "tags") (in $currentUrl "search") }}
-            {{ $isBlogContext = true }}
+        {{ $isBlogContext = true }}
         {{ end }}
 
-        {{/* 步骤 B: 识别当前菜单项是否是“文章”入口 */}}
-        {{/* 只要菜单链接中包含 "/posts"，我们就认定它是文章主菜单 (兼容 /posts 和 /posts/) */}}
         {{ $isPostsMenu := in .URL "/posts" }}
-
-        {{/* 步骤 C: 如果是文章菜单 且 当前处于博客范畴，强制激活 */}}
         {{ $isAggregated := and $isPostsMenu $isBlogContext }}
 
-        {{/* 最终激活状态 */}}
         {{ $isActive := or $isExact $isPrefix $isSectionMatch $isAggregated }}
 
         <a href="{{ .URL }}"
@@ -112,6 +106,29 @@
             }
         });
 
+        // --- 核心修改：瞬时定位逻辑 ---
+        if (activeItem) {
+            // 1. 暂时禁用过渡动画，防止光标从零位置滑过来
+            cursor.style.transition = 'none';
+            cursor.style.opacity = '1';
+
+            // 2. 计算并应用位置
+            const left = activeItem.offsetLeft;
+            const width = activeItem.offsetWidth;
+            cursor.style.width = `${width}px`;
+            cursor.style.transform = `translateX(${left}px)`;
+
+            // 3. 强制浏览器回流 (Reflow)，确保 transition='none' 立即生效
+            void cursor.offsetWidth;
+
+            // 4. 恢复 CSS 定义的过渡效果 (清理 inline style，回退到 CSS 类)
+            // 使用极短的 timeout 确保下一帧才恢复动画
+            setTimeout(() => {
+                cursor.style.transition = '';
+            }, 10);
+        }
+
+        // 常规移动函数 (带动画)
         function moveCursorTo(item) {
             if (!item) {
                 cursor.style.opacity = '0';
@@ -128,11 +145,14 @@
             items.forEach(item => {
                 const isHovered = item === hoverItem;
                 const isActiveOriginal = item === activeItem;
+
+                // 仅在 hover 状态变化时操作 JS 样式
+                // 注意：默认的 active 状态现在已经通过服务器端 CSS 类渲染好了，所以这里主要处理 hover 带来的变化
+
                 const outline = item.querySelector('.header-icon-outline');
                 const filled = item.querySelector('.header-icon-filled');
                 const text = item.querySelector('.header-nav-text');
 
-                // 显示激活状态的条件：正在 hover 该项，或者（没有 hover 任何项 且 该项原本就是激活的）
                 const showActiveState = isHovered || (!hoverItem && isActiveOriginal);
 
                 if (showActiveState) {
@@ -153,18 +173,12 @@
             });
         }
 
-        // 初始化
-        setTimeout(() => {
-            if (activeItem) moveCursorTo(activeItem);
-        }, 50);
-
         // 事件监听
         items.forEach(item => {
             item.addEventListener('mouseenter', () => {
                 moveCursorTo(item);
                 updateVisuals(item);
             });
-            // 点击时更新 activeItem，防止点击后光标跳回原处
             item.addEventListener('click', () => {
                 activeItem = item;
                 moveCursorTo(item);
