@@ -1599,3 +1599,110 @@ mark.search-highlight {
   background-image: none;
   box-shadow: none;
 }
+
+/* =========================================
+   11. 文章图片优化与 Lightbox (Image Zoom)
+   ========================================= */
+
+/* --- A. 正文图片样式 (卡片化) --- */
+.layout-content img {
+  display: block;
+  max-height: 500px; /* 限制最大高度 */
+  width: auto;       /* 宽度自适应 */
+  margin: 2rem auto;
+  border-radius: 12px;
+  cursor: zoom-in;   /* 鼠标悬停显示放大镜 */
+
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.layout-content img:hover {
+  transform: scale(1.01);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* --- B. Lightbox 遮罩层 (默认隐藏) --- */
+.lightbox-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+
+  /* 磨砂玻璃背景 */
+  background-color: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  cursor: zoom-out;
+}
+
+/* 激活状态 */
+.lightbox-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* --- C. 放大后的图片 --- */
+.lightbox-img {
+  max-width: 90%;
+  max-height: 90%;
+  object-fit: contain;
+
+  border-radius: 8px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+
+  transform: scale(0.95);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.lightbox-overlay.active .lightbox-img {
+  transform: scale(1);
+}
+
+/* --- D. 关闭按钮 (SVG版) --- */
+.lightbox-close {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  width: 40px; /* 圆圈宽度 */
+  height: 40px; /* 圆圈高度 */
+
+  /* Flex 完美居中 SVG */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: var(--color-brand);
+  color: white; /* SVG 的 stroke 颜色会继承这个 */
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(192, 91, 77, 0.4);
+  transition: transform 0.2s;
+
+  /* 移除之前所有关于 font-size, line-height, padding 的设置 */
+}
+
+/* 控制内部 SVG 的尺寸 */
+.lightbox-close svg {
+  width: 24px;  /* 叉叉的大小 */
+  height: 24px;
+  display: block; /* 防止 SVG产生多余的下边距 */
+}
+
+.lightbox-close:hover {
+  transform: rotate(90deg) scale(1.1);
+  filter: brightness(0.9);
+}

@@ -24,6 +24,9 @@ theme = 'hugo-theme-drone'
         avatar = "/images/avatar.png"
         description = "活死人の行知路..."
 
+    # 开启文章图片点击放大 (Lightbox)
+    enableImageZoom = true
+
 [outputs]
     home = ["HTML", "RSS", "JSON"]
 
