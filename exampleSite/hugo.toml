@@ -24,6 +24,9 @@ theme = 'hugo-theme-drone'
         avatar = "/images/avatar.png"
         description = "活死人の行知路..."
 
+[outputs]
+    home = ["HTML", "RSS", "JSON"]
+
 # 新增分页配置
 [pagination]
     pagerSize = 20

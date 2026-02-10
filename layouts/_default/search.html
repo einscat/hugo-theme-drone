@@ -38,7 +38,14 @@
                 <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
                   <svg class="w-5 h-5 text-secondary/50 group-focus-within:text-brand transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                 </div>
-                <input type="text" id="search-input" class="block w-full pl-14 pr-5 py-4 bg-white/60 backdrop-blur-xl border border-white/60 rounded-3xl text-lg text-primary placeholder:text-secondary/40 shadow-sm focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand/50 transition-all duration-300" placeholder="Type to search..." autocomplete="off">
+                <input
+                        type="text"
+                        id="search-input"
+                        data-index-path="{{ "index.json" | relURL }}"
+                        class="block w-full pl-14 pr-5 py-4 bg-white/60 backdrop-blur-xl border border-white/60 rounded-3xl text-lg text-primary placeholder:text-secondary/40 shadow-sm focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand/50 transition-all duration-300"
+                        placeholder="Type to search..."
+                        autocomplete="off"
+                >
                 <div id="search-loading" class="hidden absolute inset-y-0 right-0 pr-5 items-center">
                   <svg class="animate-spin h-5 w-5 text-brand" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
                 </div>

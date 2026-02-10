@@ -1581,3 +1581,21 @@
   font-style: italic;
   opacity: 0.8;
 }
+
+/* =========================================
+   Search Highlight Style (Add to end of file)
+   ========================================= */
+
+mark.search-highlight {
+  /* 强制使用品牌色，覆盖浏览器默认黄色 */
+  color: var(--color-brand) !important;
+  background-color: rgba(192, 91, 77, 0.15) !important; /* 品牌色 15% 透明度 */
+
+  font-weight: 700;
+  border-radius: 4px;
+  padding: 0 2px;
+
+  /* 清除默认样式 */
+  background-image: none;
+  box-shadow: none;
+}
