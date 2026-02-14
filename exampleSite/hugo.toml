@@ -1,38 +1,38 @@
 baseURL = 'https://example.org/'
-languageCode = 'en-US'
-title = 'My New Hugo Site'
-
+languageCode = "zh-cn"
+defaultContentLanguage = "zh-cn" # en / zh-cn / ... (This field determines which i18n file to use)
+title = '活死人の行知路'
+# 启用主题
 theme = 'hugo-theme-drone'
 
 [author]
-    name = "活死人"
-
-[params]
-    # 站点信息（可选，不需要的可以直接注释掉）
-    logoTitle = "活死人"                                   # 默认值: 上面设置的title值
-    keywords = ["Hugo", "theme","drone"]
-    description = "遥望未来，一片混沌，行知路，虽千万里，吾往矣"
-
-    # 首页 Photo Card 展示的图片路径
-    home_photo_url = "/images/cat.png"
-
-    # 备案信息
-    icp = "苏ICP备20013139号-2"
-
-    [params.meta]
-        username = "Y"
-        avatar = "/images/avatar.png"
-        description = "活死人の行知路..."
-
-    # 开启文章图片点击放大 (Lightbox)
-    enableImageZoom = true
+  name = "活死人"
 
 [outputs]
-    home = ["HTML", "RSS", "JSON"]
+  home = ["HTML", "RSS", "JSON"]
 
 # 新增分页配置
 [pagination]
     pagerSize = 20
+
+# ==========================================
+# 站点自定义参数 (Params) - 全部平铺
+# ==========================================
+[params]
+  # 站点基础信息
+  logoTitle = "虽千万里，吾往矣"
+  keywords = ["Hugo", "theme", "drone"]
+  description = "遥望未来一片混沌；纵前路漫漫，既心之所向 虽千万里，吾往矣"
+  avatar = "/images/avatar.png"
+
+  # 首页 Photo Card 展示的图片路径
+  home_photo_url = "/images/cat.png"
+
+  # 备案信息
+  icp = "苏ICP备20013139号-2"
+
+  # 开启文章图片点击放大 (Lightbox)
+  enableImageZoom = true
 
 [[menu.main]]
     name = "笔记"

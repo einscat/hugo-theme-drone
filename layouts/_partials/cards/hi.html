@@ -1,11 +1,11 @@
 {{/* 读取 hugo.toml 中的 [params.meta] 配置 */}}
-{{ $meta := .Site.Params.meta }}
+{{ $site := .Site.Params }}
 
 <div class="card card-hi">
     <div class="relative w-24 h-24 mb-4">
         <img
-                src="{{ $meta.avatar | default "/images/avatar.png" }}"
-        alt="{{ $meta.username }}"
+                src="{{ $site.avatar | default "/images/avatar.png" }}"
+        alt="{{ $site.author.name }}"
         class="w-full h-full rounded-full border-4 border-white/30 object-cover shadow-lg"
         />
         <div class="absolute bottom-1 right-1 w-5 h-5 bg-[#35bfab] rounded-full border-4 border-[#eee]"></div>
@@ -14,11 +14,11 @@
     <h2 id="greeting-text" class="text-xl font-bold text-primary/80 mb-1">Hello World</h2>
 
     <h1 class="text-3xl font-black text-primary tracking-wide mb-3 font-averia">
-        {{ $meta.username }}
+        {{ $site.author.name }}
     </h1>
 
     <p class="text-sm text-secondary px-8 leading-relaxed line-clamp-2">
-        {{ $meta.description }}
+        {{ $site.description }}
     </p>
 
     <div class="absolute -z-10 inset-0 bg-gradient-to-br from-white/40 to-transparent rounded-[inherit] pointer-events-none"></div>
