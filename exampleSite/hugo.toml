@@ -1,9 +1,8 @@
 baseURL = 'https://example.org/'
 languageCode = "zh-cn"
-defaultContentLanguage = "zh-cn" # en / zh-cn / ... (This field determines which i18n file to use)
+defaultContentLanguage = "zh-cn"                            # en / zh-cn / ... (This field determines which i18n file to use)
 title = '活死人の行知路'
-# 启用主题
-theme = 'hugo-theme-drone'
+theme = 'hugo-theme-drone'                                  # 启用主题
 
 [outputs]
   home = ["HTML", "RSS", "JSON"]
@@ -13,7 +12,7 @@ theme = 'hugo-theme-drone'
     pagerSize = 20
 
 # ==========================================
-# 站点自定义参数 (Params) - 全部平铺
+# 站点自定义参数 (Params)
 # ==========================================
 [params]
   # 站点基础信息
