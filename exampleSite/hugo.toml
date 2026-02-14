@@ -25,15 +25,14 @@ theme = 'hugo-theme-drone'
   description = "遥望未来一片混沌；纵前路漫漫，既心之所向 虽千万里，吾往矣"
   avatar = "/images/avatar.png"
   logo = "/images/avatar.png"
-
   # 首页 Photo Card 展示的图片路径
   home_photo_url = "/images/cat.png"
-
   # 备案信息
   icp = "苏ICP备20013139号-2"
-
   # 开启文章图片点击放大 (Lightbox)
   enableImageZoom = true
+  [params.author]
+    name = "活死人"
 
 [[menu.main]]
     name = "笔记"

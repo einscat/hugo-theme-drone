@@ -11,16 +11,16 @@
 
     <a href="/" class="flex items-center gap-3 group no-underline text-primary shrink-0 mr-8">
         <img
-                src="{{ $site.meta.logo | default "/images/avatar.png" }}"
+                src="{{ $site.logo }}"
         alt="Logo"
         class="w-10 h-10 rounded-full object-cover shadow-sm transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6"
         />
         <div class="flex flex-col">
             <span class="font-averia text-lg font-bold tracking-wide leading-none group-hover:text-brand transition-colors">
-                {{ $site.meta.username }}
+                {{ .Site.Title }}
             </span>
             <span class="text-[10px] text-secondary font-medium tracking-wider hidden sm:block opacity-60 mt-0.5">
-                {{ $site.meta.description | truncate 20 }}
+                {{ $site.description | truncate 20 }}
             </span>
         </div>
     </a>
