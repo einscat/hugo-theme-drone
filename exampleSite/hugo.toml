@@ -5,9 +5,6 @@ title = '活死人の行知路'
 # 启用主题
 theme = 'hugo-theme-drone'
 
-[author]
-  name = "活死人"
-
 [outputs]
   home = ["HTML", "RSS", "JSON"]
 
