@@ -24,6 +24,7 @@ theme = 'hugo-theme-drone'
   keywords = ["Hugo", "theme", "drone"]
   description = "遥望未来一片混沌；纵前路漫漫，既心之所向 虽千万里，吾往矣"
   avatar = "/images/avatar.png"
+  logo = "/images/avatar.png"
 
   # 首页 Photo Card 展示的图片路径
   home_photo_url = "/images/cat.png"
