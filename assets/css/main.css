@@ -1490,17 +1490,15 @@
 @media (min-width: 1460px) {
   .right-toc-nav {
     display: block;
-    position: absolute;
-    top: 0;
-    left: 100%; /* 紧贴主容器右侧 */
-    z-index: 10;
-    padding-left: 20px; /* 与文章主体的间距 */
+    position: fixed;
+    top: 160px; /* 完美对齐正文头部，固定在屏幕上 */
+    left: calc(50% + 512px + 24px); /* 512px 是文章主体最大宽度的一半，24px 是间距，固定在右侧 */
+    z-index: 40;
   }
 
   .sidebar-inner {
-    position: sticky;
-    top: 2rem; /* 粘性定位顶部间距 */
-    max-height: calc(100vh - 150px); /* 【关键】改用 max-height，使得短目录时高度自适应内容，长目录时限制最大高度 */
+    position: relative;
+    max-height: calc(100vh - 200px); /* 限制最大高度以适配屏幕，防止底部超出 */
     width: 240px; /* 初始宽度 */
     min-width: 200px; /* 拖拽的最小宽度 */
     max-width: 500px; /* 拖拽的最大宽度 */
@@ -1549,7 +1547,7 @@
 .sidebar-toc {
   flex: 1; /* 自动撑满剩余高度 */
   min-height: 0; /* 【核心修复】必须加这个，否则 flex 子元素会被内容撑开，导致高度超限，无法出现自己的滚动条！ */
-  overflow-y: auto;
+  overflow-y: hidden; /* 默认静止，鼠标不移入时整体固定不动 */
   overscroll-behavior: contain; /* 防止滚动穿透到主体笔记 */
   pointer-events: auto;
   
@@ -1558,6 +1556,11 @@
   -ms-overflow-style: none;
 }
 .sidebar-toc::-webkit-scrollbar { display: none; }
+
+/* 鼠标悬停在侧栏内部时，允许上下滚动目录内容 */
+.sidebar-inner:hover .sidebar-toc {
+  overflow-y: auto;
+}
 
 .sidebar-toc ul {
   list-style: none;
