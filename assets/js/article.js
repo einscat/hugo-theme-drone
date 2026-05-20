@@ -93,6 +93,8 @@ document.addEventListener('DOMContentLoaded', function() {
         headings.forEach(heading => observer.observe(heading));
     }
 
+    // JS 手动干预被移除，让原生 CSS 的 overflow-y 和 overscroll-behavior-y 完全接管目录的滚动。
+
     // =========================================
     // 3. 图片放大 (Lightbox)
     // =========================================

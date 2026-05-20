@@ -1492,8 +1492,7 @@
     display: block;
     position: absolute;
     top: 0;
-    left: 100%; /* 位于文章容器右侧 */
-    margin-left: 0;
+    left: 100%; /* 紧贴主容器右侧 */
     width: 240px;
     height: 100%;
     z-index: 10;
@@ -1502,9 +1501,13 @@
 
   .sidebar-inner {
     position: sticky;
-    top: 2rem;
-    max-height: calc(100vh - 4rem);
-    overflow-y: auto;
+    top: 2rem; /* 粘性定位顶部间距 */
+    max-height: calc(100vh - 150px); /* 【关键】改用 max-height，使得短目录时高度自适应内容，长目录时限制最大高度 */
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    pointer-events: auto; /* 确保能接收鼠标事件 */
+    overflow: hidden; /* 防止内部高度溢出 */
 
     /* TOC 容器磨砂风格 */
     background-color: rgba(255, 255, 255, 0.6);
@@ -1512,12 +1515,7 @@
     border: 1px solid rgba(255, 255, 255, 0.6);
     border-radius: 12px;
     padding: 16px;
-
-    /* 隐藏滚动条 */
-    scrollbar-width: none;
-    -ms-overflow-style: none;
   }
-  .sidebar-inner::-webkit-scrollbar { display: none; }
 }
 
 .sidebar-header {
@@ -1530,6 +1528,19 @@
 }
 
 /* TOC 链接层级样式 */
+.sidebar-toc {
+  flex: 1; /* 自动撑满剩余高度 */
+  min-height: 0; /* 【核心修复】必须加这个，否则 flex 子元素会被内容撑开，导致高度超限，无法出现自己的滚动条！ */
+  overflow-y: auto;
+  overscroll-behavior: contain; /* 防止滚动穿透到主体笔记 */
+  pointer-events: auto;
+  
+  /* 隐藏滚动条 */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.sidebar-toc::-webkit-scrollbar { display: none; }
+
 .sidebar-toc ul {
   list-style: none;
   padding: 0;
