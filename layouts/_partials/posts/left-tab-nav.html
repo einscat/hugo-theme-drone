@@ -1,10 +1,10 @@
 {{/* 左侧导航：使用 href 跳转实现路由分离 */}}
 
 {{/* 判断当前高亮状态 */}}
-{{ $isDeepPage := or .IsPage (eq .Kind "term") }}
+{{ $isDeepPage := .IsPage }}
 {{ $isPosts := or (eq .Section "posts") (eq .Type "posts") }}
-{{ $isCategories := eq .Section "categories" }}
-{{ $isTags := eq .Section "tags" }}
+{{ $isCategories := or (eq .Section "categories") (eq .Data.Plural "categories") (eq .Data.Singular "category") }}
+{{ $isTags := or (eq .Section "tags") (eq .Data.Plural "tags") (eq .Data.Singular "tag") }}
 {{ $isSearch := eq .Section "search" }}
 
 <div class="hidden xl:flex fixed left-1/2 -ml-[36.5rem] top-40 z-40 flex-col items-end">

@@ -20,14 +20,14 @@
           <a href="{{ "/posts/" | relLangURL }}" class="mobile-tab px-4 py-1.5 text-secondary no-underline font-medium text-sm">Year</a>
           <div class="w-px h-3 bg-black/10 mx-2"></div>
 
-          {{/* Categories 高亮 */}}
-          <a href="{{ "/categories/" | relLangURL }}" class="mobile-tab px-3 py-1.5 {{ if eq .Data.Singular "category" }}active text-white bg-brand shadow-sm{{ else }}text-secondary{{ end }}">
-          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-          </a>
-
           {{/* Tags 高亮 */}}
           <a href="{{ "/tags/" | relLangURL }}" class="mobile-tab px-3 py-1.5 {{ if eq .Data.Singular "tag" }}active text-white bg-brand shadow-sm{{ else }}text-secondary{{ end }}">
           <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path></svg>
+          </a>
+
+          {{/* Categories 高亮 */}}
+          <a href="{{ "/categories/" | relLangURL }}" class="mobile-tab px-3 py-1.5 {{ if eq .Data.Singular "category" }}active text-white bg-brand shadow-sm{{ else }}text-secondary{{ end }}">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
           </a>
 
           {{/* Search */}}
