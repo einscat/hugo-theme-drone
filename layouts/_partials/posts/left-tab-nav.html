@@ -37,18 +37,18 @@
 
         <div class="w-6 h-px bg-black/5 my-1"></div>
 
-        {{/* 2. Categories -> 跳转 /categories/ (使用 terms.html) */}}
-        <a href="{{ "/categories/" | relLangURL }}"
-        class="side-tab {{ if $isCategories }}active{{ end }} group relative z-10 w-11 h-11 flex items-center justify-center text-secondary rounded-full transition-all duration-300 hover:text-brand"
-        title="Categories">
-        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-        </a>
-
-        {{/* 3. Tags -> 跳转 /tags/ (使用 terms.html) */}}
+        {{/* 2. Tags -> 跳转 /tags/ (使用 terms.html) */}}
         <a href="{{ "/tags/" | relLangURL }}"
         class="side-tab {{ if $isTags }}active{{ end }} group relative z-10 w-11 h-11 flex items-center justify-center text-secondary rounded-full transition-all duration-300 hover:text-brand"
         title="Tags">
         <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+        </a>
+
+        {{/* 3. Categories -> 跳转 /categories/ (使用 terms.html) */}}
+        <a href="{{ "/categories/" | relLangURL }}"
+        class="side-tab {{ if $isCategories }}active{{ end }} group relative z-10 w-11 h-11 flex items-center justify-center text-secondary rounded-full transition-all duration-300 hover:text-brand"
+        title="Categories">
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
         </a>
 
         {{/* 4. Search */}}
