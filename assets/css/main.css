@@ -1493,8 +1493,6 @@
     position: absolute;
     top: 0;
     left: 100%; /* 紧贴主容器右侧 */
-    width: 240px;
-    height: 100%;
     z-index: 10;
     padding-left: 20px; /* 与文章主体的间距 */
   }
@@ -1503,7 +1501,9 @@
     position: sticky;
     top: 2rem; /* 粘性定位顶部间距 */
     max-height: calc(100vh - 150px); /* 【关键】改用 max-height，使得短目录时高度自适应内容，长目录时限制最大高度 */
-    width: 100%;
+    width: 240px; /* 初始宽度 */
+    min-width: 200px; /* 拖拽的最小宽度 */
+    max-width: 500px; /* 拖拽的最大宽度 */
     display: flex;
     flex-direction: column;
     pointer-events: auto; /* 确保能接收鼠标事件 */
@@ -1515,6 +1515,24 @@
     border: 1px solid rgba(255, 255, 255, 0.6);
     border-radius: 12px;
     padding: 16px;
+  }
+
+  /* 侧边栏拖拽手柄样式 */
+  .sidebar-resize-handle {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 6px;
+    height: 100%;
+    cursor: col-resize;
+    z-index: 50;
+    transition: background-color 0.2s;
+  }
+
+  .sidebar-resize-handle:hover,
+  .sidebar-resize-handle.resizing {
+    background-color: rgba(192, 91, 77, 0.2); /* 悬浮或拖拽时高亮提示 */
+    border-right: 2px solid var(--color-brand);
   }
 }
 

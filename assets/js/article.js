@@ -96,6 +96,43 @@ document.addEventListener('DOMContentLoaded', function() {
     // JS 手动干预被移除，让原生 CSS 的 overflow-y 和 overscroll-behavior-y 完全接管目录的滚动。
 
     // =========================================
+    // 4. 目录宽度手动拖拽 (TOC Width Resize)
+    // =========================================
+    const handle = document.querySelector('.sidebar-resize-handle');
+    const sidebar = document.querySelector('.sidebar-inner');
+    if (handle && sidebar) {
+        let isResizing = false;
+        let startX, startWidth;
+
+        handle.addEventListener('mousedown', function(e) {
+            isResizing = true;
+            startX = e.clientX;
+            startWidth = parseInt(document.defaultView.getComputedStyle(sidebar).width, 10);
+            document.documentElement.addEventListener('mousemove', doDrag, false);
+            document.documentElement.addEventListener('mouseup', stopDrag, false);
+            document.body.style.userSelect = 'none';
+            // 添加拖动时的指示样式
+            handle.classList.add('resizing');
+        });
+
+        function doDrag(e) {
+            if (!isResizing) return;
+            const width = startWidth + (e.clientX - startX);
+            if (width >= 200 && width <= 500) {
+                sidebar.style.width = width + 'px';
+            }
+        }
+
+        function stopDrag(e) {
+            isResizing = false;
+            document.documentElement.removeEventListener('mousemove', doDrag, false);
+            document.documentElement.removeEventListener('mouseup', stopDrag, false);
+            document.body.style.userSelect = '';
+            handle.classList.remove('resizing');
+        }
+    }
+
+    // =========================================
     // 3. 图片放大 (Lightbox)
     // =========================================
 
