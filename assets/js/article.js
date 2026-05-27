@@ -72,6 +72,19 @@ document.addEventListener('DOMContentLoaded', function() {
     // =========================================
 
     const tocLinks = document.querySelectorAll('.sidebar-toc a');
+
+    // 格式化目录里的标题编号前缀 (参考飞书分级标题)
+    tocLinks.forEach(link => {
+        const text = link.textContent;
+        const regex = /^([0-9]+(\.[0-9]+)*([.、]|(?=\s))|第[一二三四五六七八九十百0-9]+[步阶段章节集回][：:]*|[一二三四五六七八九十0-9]+[、.])/;
+        const match = text.match(regex);
+        if (match) {
+            const prefix = match[0];
+            const rest = text.substring(prefix.length).trim();
+            link.innerHTML = `<span class="heading-number">${prefix}</span>${rest}`;
+        }
+    });
+
     const headings = document.querySelectorAll('.layout-content h2, .layout-content h3, .layout-content h4');
 
     if (tocLinks.length > 0 && headings.length > 0) {

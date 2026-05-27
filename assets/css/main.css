@@ -835,6 +835,16 @@
   opacity: 0.9;
 }
 
+/* 标题前面的数字/前缀样式 (参考飞书分级标题) */
+.heading-number {
+  font-weight: 400 !important;
+  color: var(--color-secondary) !important;
+  margin-right: 0.4em;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.85;
+}
+
+
 /* 引用块增强 */
 .reading-content blockquote {
   font-style: italic;

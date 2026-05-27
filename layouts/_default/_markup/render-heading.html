@@ -1,0 +1,22 @@
+{{- $text := .Text -}}
+{{- /* Go's RE2 engine does not support lookarounds like (?=). We match the trailing spaces/separators directly, then trim them. */ -}}
+{{- $pattern := `^([0-9]+(\.[0-9]+)*([.、\s]|\s)+|第[一二三四五六七八九十百0-9]+[步阶段章节集回]([：:\s]|\s|$)|[一二三四五六七八九十0-9]+[、.\s]+)` -}}
+{{- $prefixArr := findRE $pattern $text 1 -}}
+{{- $level := .Level -}}
+{{- $anchor := .Anchor -}}
+
+<h{{ $level }} id="{{ $anchor }}"
+  {{- range $k, $v := .Attributes }}
+    {{- if and (ne $k "id") $v }}
+      {{- printf " %s=%q" $k $v | safeHTMLAttr }}
+    {{- end }}
+  {{- end }}>
+  {{- if $prefixArr -}}
+    {{- $prefix := index $prefixArr 0 -}}
+    {{- $cleanPrefix := trim $prefix " \t\r\n　" -}}
+    {{- $rest := strings.TrimPrefix $prefix $text | strings.TrimPrefix " " | strings.TrimPrefix "　" -}}
+    <span class="heading-number">{{ $cleanPrefix }}</span>{{ $rest | safeHTML }}
+  {{- else -}}
+    {{- $text | safeHTML -}}
+  {{- end -}}
+</h{{ $level }}>
