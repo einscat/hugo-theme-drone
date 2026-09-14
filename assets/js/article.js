@@ -30,8 +30,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     document.querySelectorAll('pre').forEach((pre) => {
-        // 避免重复处理
-        if (pre.parentNode.classList.contains('code-block-wrapper')) return;
+        // 避免重复处理或误处理 Mermaid 图表
+        if (pre.classList.contains('mermaid') || pre.closest('.mermaid-container') || pre.parentNode.classList.contains('code-block-wrapper')) return;
 
         const code = pre.querySelector('code');
         if (code) trimCodeBlock(code);

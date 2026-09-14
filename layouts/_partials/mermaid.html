@@ -1,0 +1,53 @@
+{{- if or (.Page.Store.Get "hasMermaid") (eq site.Params.mermaid.enable true) (.Params.mermaid) -}}
+  {{- $cdn := site.Params.mermaid.cdn | default "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js" -}}
+  {{- $theme := site.Params.mermaid.theme | default "default" -}}
+  <style>
+    .mermaid-container {
+      display: flex;
+      justify-content: center;
+      margin: 1.75rem 0;
+      padding: 1.25rem 1rem;
+      background: rgba(255, 255, 255, 0.55);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      border-radius: 1rem;
+      box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.04);
+      backdrop-filter: blur(8px);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .mermaid {
+      display: flex;
+      justify-content: center;
+      min-width: 100%;
+      text-align: center;
+    }
+    .mermaid svg {
+      max-width: 100%;
+      height: auto;
+    }
+    .mermaid:not([data-processed="true"]) {
+      visibility: hidden;
+      min-height: 80px;
+    }
+  </style>
+  <script src="{{ $cdn }}"></script>
+  <script>
+    (function() {
+      function initMermaid() {
+        if (typeof mermaid !== "undefined") {
+          mermaid.initialize({
+            startOnLoad: true,
+            theme: {{ $theme }},
+            securityLevel: "loose",
+            fontFamily: "inherit"
+          });
+        }
+      }
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initMermaid);
+      } else {
+        initMermaid();
+      }
+    })();
+  </script>
+{{- end -}}
