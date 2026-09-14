@@ -76,6 +76,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // 格式化目录里的标题编号前缀 (参考飞书分级标题)
     tocLinks.forEach(link => {
         const text = link.textContent;
+        link.setAttribute('title', text.trim());
         const regex = /^([0-9]+(\.[0-9]+)*([.、]|(?=\s))|第[一二三四五六七八九十百0-9]+[步阶段章节集回][：:]*|[一二三四五六七八九十0-9]+[、.])/;
         const match = text.match(regex);
         if (match) {
@@ -131,7 +132,7 @@ document.addEventListener('DOMContentLoaded', function() {
         function doDrag(e) {
             if (!isResizing) return;
             const width = startWidth + (e.clientX - startX);
-            if (width >= 200 && width <= 500) {
+            if (width >= 220 && width <= 600) {
                 sidebar.style.width = width + 'px';
             }
         }

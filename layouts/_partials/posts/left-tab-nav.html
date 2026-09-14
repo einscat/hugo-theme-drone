@@ -7,7 +7,7 @@
 {{ $isTags := or (eq .Section "tags") (eq .Data.Plural "tags") (eq .Data.Singular "tag") }}
 {{ $isSearch := eq .Section "search" }}
 
-<div class="hidden xl:flex fixed left-1/2 -ml-[36.5rem] top-40 z-40 flex-col items-end">
+<div class="left-tab-nav">
     <aside class="flex flex-col items-center gap-2 p-2 rounded-full
           bg-white/60 border border-white/60 backdrop-blur-xl
           shadow-[0_8px_30px_rgba(0,0,0,0.04)] transition-all relative pointer-events-auto">
