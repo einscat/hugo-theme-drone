@@ -132,7 +132,7 @@ document.addEventListener('DOMContentLoaded', function() {
         function doDrag(e) {
             if (!isResizing) return;
             const width = startWidth + (e.clientX - startX);
-            if (width >= 220 && width <= 600) {
+            if (width >= 180 && width <= 600) {
                 sidebar.style.width = width + 'px';
             }
         }
