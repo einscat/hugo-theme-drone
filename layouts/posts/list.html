@@ -1,7 +1,68 @@
 {{ define "main" }}
-<div class="h-screen w-full bg-bg flex flex-col overflow-hidden">
+{{ $allPosts := where .Site.RegularPages "Type" "posts" }}
+
+{{/* 专栏元数据字典：将目录名映射为清晰的中文专栏标题与简介 */}}
+{{ $columnMeta := dict
+  "programming" (dict "title" "编程与架构" "desc" "通用编程范式、微服务架构设计与工程研发实践" "badge" "Architecture")
+  "go" (dict "title" "Go 语言实战" "desc" "Golang 语言核心、并发模型与后端工程化落地" "badge" "Golang")
+  "docker" (dict "title" "Docker 容器化" "desc" "容器镜像构建、Compose 编排与生产环境部署" "badge" "Container")
+  "mysql" (dict "title" "MySQL 数据库" "desc" "存储引擎、索引调优、备份恢复与数据库设计范式" "badge" "Database")
+  "redis" (dict "title" "Redis 缓存" "desc" "高性能内存数据结构、缓存穿透防护与高可用集群" "badge" "Cache")
+  "Linux" (dict "title" "Linux 运维" "desc" "Ubuntu/CentOS 服务器配置、SSH 安全与常用命令" "badge" "System")
+  "k8s" (dict "title" "Kubernetes" "desc" "云原生容器编排、服务调度与集群运维实践" "badge" "CloudNative")
+  "python" (dict "title" "Python 开发" "desc" "Python 核心编程、Web 框架扩展与自动化测试" "badge" "Python")
+  "hugo" (dict "title" "Hugo 静态建站" "desc" "Hugo 站点构建、自定义主题开发与自动化部署" "badge" "Blog")
+  "pm-dev-doc" (dict "title" "产品与研发规范" "desc" "PRD 需求设计、适老化交互规范与模块架构方案" "badge" "Product")
+  "C" (dict "title" "C 语言底层" "desc" "指针深入剖析、内存管理与系统级编程基础" "badge" "C")
+  "mac" (dict "title" "macOS 效率指南" "desc" "Mac 开发环境搭建、外设排障与效率工具配置" "badge" "macOS")
+  "mongodb" (dict "title" "MongoDB" "desc" "NoSQL 文档数据库初识、复制集与分片集群" "badge" "NoSQL")
+  "COA" (dict "title" "计算机组成原理" "desc" "计算机硬件体系结构与底层运行机制" "badge" "CS Core")
+  "DataStructure" (dict "title" "数据结构与算法" "desc" "基础数据结构实现与核心算法思想" "badge" "Algorithm")
+  "consul" (dict "title" "Consul 服务治理" "desc" "微服务注册发现、健康检查与分布式配置" "badge" "Microservice")
+  "n8n" (dict "title" "n8n 工作流自动化" "desc" "可视化节点编排与自动化任务流集成" "badge" "Automation")
+  "postgresql" (dict "title" "PostgreSQL" "desc" "企业级开源关系型数据库应用与进阶" "badge" "Database")
+  "CS" (dict "title" "计算机通识" "desc" "计算机科学基础概念与核心理论体系" "badge" "CS")
+  "SA" (dict "title" "系统架构师" "desc" "大型系统架构演进、技术选型与全局考量" "badge" "Architect")
+  "devops" (dict "title" "DevOps 工程" "desc" "持续集成、持续交付与研发效能提升" "badge" "DevOps")
+  "html5" (dict "title" "前端与 HTML5" "desc" "现代 Web 标准、页面结构与前端交互基础" "badge" "Frontend")
+  "kafka" (dict "title" "Kafka 消息队列" "desc" "高吞吐分布式消息中间件与异步解耦" "badge" "MQ")
+  "nginx" (dict "title" "Nginx 网关" "desc" "反向代理、负载均衡与安全证书配置" "badge" "Gateway")
+  "pm" (dict "title" "产品模块设计" "desc" "业务模块抽象与配置化产品设计" "badge" "PM")
+  "prometheus" (dict "title" "Prometheus 监控" "desc" "云原生指标采集、告警规则与可观测性" "badge" "Monitor")
+  "tool" (dict "title" "研发工具链" "desc" "日常开发辅助工具与环境效率技巧" "badge" "Tooling")
+  "typescript" (dict "title" "TypeScript" "desc" "强类型前端工程化与类型体操实践" "badge" "TS")
+  "yaml" (dict "title" "YAML 配置规范" "desc" "工程配置文件语法规范与最佳实践" "badge" "Config")
+}}
+
+{{/* 按目录聚合专栏 */}}
+{{ $columnsMap := dict }}
+{{ range $allPosts }}
+  {{ $dir := path.Base (path.Dir .File.Path) }}
+  {{ if eq $dir "posts" }}{{ $dir = "general" }}{{ end }}
+  {{ $existing := index $columnsMap $dir | default (slice) }}
+  {{ $columnsMap = merge $columnsMap (dict $dir ($existing | append .)) }}
+{{ end }}
+
+{{/* 构造可按文章数降序排列的专栏切片 */}}
+{{ $columnsSortable := slice }}
+{{ range $key, $pages := $columnsMap }}
+  {{ $meta := index $columnMeta $key | default (dict "title" ($key | upper) "desc" (printf "%s 相关技术笔记与实践总结" $key) "badge" $key) }}
+  {{ $sortKey := printf "%05d_%s" (len $pages) $key }}
+  {{ $columnsSortable = $columnsSortable | append (dict
+    "sortKey" $sortKey
+    "key" $key
+    "title" $meta.title
+    "desc" $meta.desc
+    "badge" $meta.badge
+    "count" (len $pages)
+    "pages" $pages
+  ) }}
+{{ end }}
+{{ $columnsSorted := sort $columnsSortable "sortKey" "desc" }}
+
+<div class="h-screen w-full bg-bg flex flex-col overflow-hidden" data-pjax-shell="posts-list">
     {{/* 1. Header (固定在顶部) */}}
-    <div class="flex-none z-50 py-4 w-full relative">
+    <div class="flex-none z-50 py-4 w-full relative" data-pjax-header>
         {{ partial "header.html" . }}
     </div>
 
@@ -9,23 +70,125 @@
     {{ partial "posts/left-tab-nav.html" . }}
 
     {{/* 3. 滚动区域 (占据剩余空间) */}}
-    <div class="flex-1 w-full relative overflow-hidden">
+    <div class="flex-1 w-full relative overflow-hidden" data-pjax-body>
         <div id="scroll-container" class="absolute inset-0 w-full h-full overflow-y-auto no-scrollbar scroll-smooth pt-2 pb-24">
+
+            {{/* 移动端/窄屏子导航 (专栏 / Year / Tags / Search) */}}
+            {{ partial "posts/mobile-tab-nav.html" . }}
 
             {{/* 文章列表内容容器 */}}
             <div class="list-container mx-auto px-4 sm:px-8">
                 <div class="relative min-h-[400px]">
-                    <div class="view-section">
-                        <div class="grid gap-10">
-                            {{/* 1. 初始化分页器 (只筛选 posts 类型，避免混合其他页面) */}}
-                            {{ $paginator := .Paginate (where .Pages "Type" "posts") }}
 
-                            {{/* 2. 按年份分组循环 */}}
+                    {{/* ==========================================
+                         视图 A：技术专栏卡片墙 (默认首屏，告别流水账)
+                         ========================================== */}}
+                    <div id="posts-view-columns" class="view-section">
+                        <div class="mb-6 sm:mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-2 px-1">
+                            <div>
+                                <h2 class="text-xl sm:text-2xl font-black text-primary tracking-tight">技术专栏</h2>
+                                <p class="text-xs sm:text-sm text-secondary/80 mt-0.5">按领域系统化整理，共 {{ len $columnsSorted }} 个专题 · {{ len $allPosts }} 篇笔记</p>
+                            </div>
+                        </div>
+
+                        <div class="columns-grid grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
+                            {{ range $col := $columnsSorted }}
+                            {{ $latestPage := index $col.pages 0 }}
+                            <div class="column-card group bg-white/55 hover:bg-white/85 backdrop-blur-md border border-white/70 rounded-2xl p-4 sm:p-5 transition-all duration-300 hover:shadow-md flex flex-col justify-between">
+                                <div>
+                                    {{/* 专栏头部：名称 + 徽章 + 篇数 */}}
+                                    <div class="flex items-start justify-between gap-3 mb-2 cursor-pointer" data-open-column="{{ $col.key }}">
+                                        <div class="min-w-0">
+                                            <div class="flex items-center gap-2 flex-wrap">
+                                                <h3 class="text-base sm:text-lg font-bold text-primary group-hover:text-brand transition-colors m-0 leading-snug">
+                                                    {{ $col.title }}
+                                                </h3>
+                                                <span class="text-[10px] font-mono font-semibold px-2 py-0.5 rounded-md bg-brand/10 text-brand">
+                                                    {{ $col.badge }}
+                                                </span>
+                                            </div>
+                                            <p class="text-xs text-secondary/80 mt-1 mb-0 line-clamp-1">
+                                                {{ $col.desc }}
+                                            </p>
+                                        </div>
+
+                                        <span class="shrink-0 text-xs font-bold px-2.5 py-1 rounded-full bg-white/80 border border-white text-primary shadow-2xs">
+                                            {{ $col.count }} 篇
+                                        </span>
+                                    </div>
+
+                                    <div class="h-px bg-black/5 my-3"></div>
+
+                                    {{/* 专栏内最新 3 篇文章预览（可直接点击阅读） */}}
+                                    <ul class="list-none p-0 m-0 flex flex-col gap-2">
+                                        {{ range first 3 $col.pages }}
+                                        <li>
+                                            <a href="{{ .RelPermalink }}" class="flex items-center justify-between gap-2 text-xs sm:text-sm text-primary/85 hover:text-brand no-underline py-1 px-2 -mx-2 rounded-lg hover:bg-brand/5 transition-colors">
+                                                <span class="truncate font-medium">• {{ .Title }}</span>
+                                                <span class="font-mono text-[11px] text-secondary/60 shrink-0">{{ .Date.Format "01-02" }}</span>
+                                            </a>
+                                        </li>
+                                        {{ end }}
+                                    </ul>
+                                </div>
+
+                                {{/* 底部：展开该专栏全部文章 */}}
+                                <div class="mt-3 pt-2.5 border-t border-dashed border-black/5 flex items-center justify-between text-xs">
+                                    <span class="text-secondary/60 font-mono">最近更新 {{ $latestPage.Date.Format "2006-01-02" }}</span>
+                                    <button type="button"
+                                            data-open-column="{{ $col.key }}"
+                                            class="text-brand font-semibold hover:underline cursor-pointer bg-transparent border-0 p-0 inline-flex items-center gap-1">
+                                        <span>查看全部 {{ $col.count }} 篇</span>
+                                        <span>→</span>
+                                    </button>
+                                </div>
+                            </div>
+                            {{ end }}
+                        </div>
+                    </div>
+
+                    {{/* ==========================================
+                         视图 B：单个专栏详情列表视图 (点击任意专栏卡片进入)
+                         ========================================== */}}
+                    <div id="posts-view-column-detail" class="view-section hidden">
+                        {{ range $col := $columnsSorted }}
+                        <div class="column-detail-panel hidden" data-column-panel="{{ $col.key }}">
+                            <div class="mb-6 bg-white/60 backdrop-blur-md border border-white/70 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                                <div>
+                                    <div class="flex items-center gap-2.5 flex-wrap">
+                                        <h2 class="text-lg sm:text-2xl font-black text-primary m-0">{{ $col.title }}</h2>
+                                        <span class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-brand/10 text-brand">{{ $col.count }} 篇</span>
+                                    </div>
+                                    <p class="text-xs sm:text-sm text-secondary mt-1 mb-0">{{ $col.desc }}</p>
+                                </div>
+                                <button type="button"
+                                        data-back-columns
+                                        class="self-start sm:self-center shrink-0 inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-white hover:bg-brand hover:text-white text-primary text-xs sm:text-sm font-semibold border border-black/5 shadow-2xs transition-all cursor-pointer">
+                                    <span>← 返回全部专栏</span>
+                                </button>
+                            </div>
+
+                            <div class="grid gap-3">
+                                {{ range $col.pages }}
+                                {{ partial "posts/post-card-row.html" . }}
+                                {{ end }}
+                            </div>
+                        </div>
+                        {{ end }}
+                    </div>
+
+                    {{/* ==========================================
+                         视图 C：按年份时间轴视图 (点击 Year 切换)
+                         ========================================== */}}
+                    <div id="posts-view-timeline" class="view-section hidden">
+                        <div class="grid gap-7 sm:gap-10">
+                            {{ $paginator := .Paginate $allPosts }}
+
                             {{ range $paginator.Pages.GroupByDate "2006" }}
-                            <div class="relative pl-8 border-l-2 border-dashed border-black/5">
+                            <div class="relative pl-5 sm:pl-8 border-l-2 border-dashed border-black/5">
                                 <span class="absolute -left-[9px] top-2 w-4 h-4 rounded-full bg-brand/20 border-2 border-white box-content"></span>
 
-                                <h3 class="text-3xl font-black text-primary/80 mb-6 font-averia flex items-center gap-3">
+                                <h3 class="text-2xl sm:text-3xl font-black text-primary/80 mb-4 sm:mb-6 font-averia flex items-center gap-3">
                                     {{ .Key }}
                                     <span class="text-xs font-normal text-secondary bg-white/50 px-2 py-0.5 rounded-full border border-white/50">{{ len .Pages }}</span>
                                 </h3>
@@ -39,9 +202,9 @@
                             {{ end }}
                         </div>
 
-                        {{/* 3. 调用分页组件 */}}
                         {{ partial "posts/pagination.html" $paginator }}
                     </div>
+
                 </div>
             </div>
 
@@ -50,8 +213,4 @@
         </div>
     </div>
 </div>
-
-{{/* 加载列表页专用脚本 */}}
-{{ $js := resources.Get "js/list.js" | js.Build (dict "Minify" true) | resources.Fingerprint }}
-<script src="{{ $js.RelPermalink }}" defer></script>
 {{ end }}

@@ -1,14 +1,16 @@
 <!DOCTYPE html>
-<html lang="{{ site.Language.LanguageCode }}" dir="{{ or site.Language.LanguageDirection `ltr` }}">
+<html lang="{{ site.Language.LanguageCode }}"
+      dir="{{ or site.Language.LanguageDirection `ltr` }}"
+      data-mermaid-cdn="{{ site.Params.mermaid.cdn | default `https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js` }}"
+      data-mermaid-theme="{{ site.Params.mermaid.theme | default `default` }}">
 <head>
   {{ partial "head.html" . }}
 </head>
 <body>
 
-  <main>
+  <main id="pjax-main">
     {{ block "main" . }}{{ end }}
   </main>
 
-  {{ partial "mermaid.html" . }}
 </body>
 </html>

@@ -1,13 +1,13 @@
 {{ define "main" }}
 
-<div class="h-screen w-full bg-bg flex flex-col overflow-hidden">
-  <div class="flex-none z-50 py-4 w-full relative">
+<div class="h-screen w-full bg-bg flex flex-col overflow-hidden" data-pjax-shell="posts-single">
+  <div class="flex-none z-50 py-4 w-full relative" data-pjax-header>
     {{ partial "header.html" . }}
   </div>
 
   {{ partial "posts/left-tab-nav.html" . }}
 
-  <div class="flex-1 w-full flex flex-col overflow-hidden">
+  <div class="flex-1 w-full flex flex-col overflow-hidden" data-pjax-body>
     <div class="flex-1 w-full overflow-y-auto no-scrollbar scroll-smooth" id="scroll-container">
       <div class="article-container pt-8 pb-24">
 
@@ -66,8 +66,5 @@
   <img id="lightbox-image" class="lightbox-img" src="" alt="Zoomed Image">
 </div>
 {{ end }}
-
-{{ $script := resources.Get "js/article.js" | minify | fingerprint }}
-<script src="{{ $script.RelPermalink }}" defer></script>
 
 {{ end }}

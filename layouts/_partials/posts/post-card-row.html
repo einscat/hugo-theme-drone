@@ -1,13 +1,22 @@
-<a href="{{ .RelPermalink }}" class="block group">
-  <div class="flex items-center justify-between bg-white/40 hover:bg-white border border-white/50 hover:border-white rounded-xl px-5 py-3 transition-all duration-200 hover:shadow-sm">
-    <div class="flex items-center gap-4 overflow-hidden">
-      <span class="font-mono text-sm text-secondary/70 shrink-0">{{ .Date.Format "2006-01-02" }}</span>
-      <span class="w-px h-3 bg-black/10 shrink-0"></span>
-      <span class="font-medium text-primary truncate group-hover:text-brand transition-colors">{{ .Title }}</span>
+{{ $weekday := replace (.Date.Format "Mon") "Mon" "周一" | replaceRE "Tue" "周二" | replaceRE "Wed" "周三" | replaceRE "Thu" "周四" | replaceRE "Fri" "周五" | replaceRE "Sat" "周六" | replaceRE "Sun" "周日" }}
+<a href="{{ .RelPermalink }}" class="block group no-underline">
+  <div class="post-card-row flex flex-col sm:flex-row sm:items-center sm:justify-between bg-white/40 hover:bg-white border border-white/50 hover:border-white rounded-xl px-4 py-3 sm:px-5 sm:py-3 transition-all duration-200 hover:shadow-sm gap-1.5 sm:gap-4">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:gap-4 min-w-0 flex-1 overflow-hidden">
+      <span class="hidden sm:inline font-mono text-sm text-secondary/70 shrink-0">{{ .Date.Format "2006-01-02" }}</span>
+      <span class="hidden sm:inline w-px h-3 bg-black/10 shrink-0"></span>
+      <span class="post-card-title font-medium text-primary group-hover:text-brand transition-colors leading-snug line-clamp-2 sm:line-clamp-none sm:truncate">{{ .Title }}</span>
     </div>
 
-    <div class="text-[10px] font-bold px-2 py-1 rounded bg-black/5 text-secondary group-hover:bg-brand group-hover:text-white transition-colors shrink-0">
-      {{ replace (.Date.Format "Mon") "Mon" "周一" | replaceRE "Tue" "周二" | replaceRE "Wed" "周三" | replaceRE "Thu" "周四" | replaceRE "Fri" "周五" | replaceRE "Sat" "周六" | replaceRE "Sun" "周日" }}
+    <div class="flex items-center justify-between sm:justify-end gap-2 shrink-0">
+      <div class="flex sm:hidden items-center gap-1.5 text-xs text-secondary/70">
+        <span class="font-mono">{{ .Date.Format "2006-01-02" }}</span>
+        <span class="opacity-40">·</span>
+        <span>{{ $weekday }}</span>
+      </div>
+
+      <div class="hidden sm:block text-[10px] font-bold px-2 py-1 rounded bg-black/5 text-secondary group-hover:bg-brand group-hover:text-white transition-colors shrink-0">
+        {{ $weekday }}
+      </div>
     </div>
   </div>
 </a>

@@ -11,3 +11,7 @@ resources/
 content
 
 node_modules/
+
+# 本地测试/预览媒体文件（不同步至主题仓库）
+static/video/
+static/images/reading/

@@ -2,22 +2,18 @@
 {{ $site := .Site.Params }}
 
 <div class="card card-hi">
-    <div class="relative w-24 h-24 mb-4">
+    <div class="relative w-20 h-20 sm:w-24 sm:h-24 mb-3 sm:mb-4">
         <img
                 src="{{ $site.avatar }}"
         alt="{{ $site.author.name }}"
         class="w-full h-full rounded-full border-4 border-white/30 object-cover shadow-lg"
         />
-        <div class="absolute bottom-1 right-1 w-5 h-5 bg-[#35bfab] rounded-full border-4 border-[#eee]"></div>
+        <div class="absolute bottom-1 right-1 w-4 h-4 sm:w-5 sm:h-5 bg-[#35bfab] rounded-full border-4 border-[#eee]"></div>
     </div>
 
-    <h2 id="greeting-text" class="text-xl font-bold text-primary/80 mb-1">Hello World</h2>
+    <h2 id="greeting-text" class="text-xl sm:text-2xl font-bold text-primary mb-2 font-averia">Hello World</h2>
 
-    <h1 class="text-3xl font-black text-primary tracking-wide mb-3 font-averia">
-        {{ $site.author.name }}
-    </h1>
-
-    <p class="text-sm text-secondary px-8 leading-relaxed line-clamp-2">
+    <p class="text-xs sm:text-sm text-secondary px-6 sm:px-8 leading-relaxed line-clamp-2">
         {{ $site.description }}
     </p>
 

@@ -18,10 +18,4 @@
   </div>
   {{ end }}
 </div>
-
-{{ $clockJs := resources.Get "js/clock.js" | js.Build (dict "Minify" true) | resources.Fingerprint }}
-<script src="{{ $clockJs.RelPermalink }}" defer></script>
-
-{{ $navJs := resources.Get "js/nav.js" | js.Build (dict "Minify" true) | resources.Fingerprint }}
-<script src="{{ $navJs.RelPermalink }}" defer></script>
 {{ end }}

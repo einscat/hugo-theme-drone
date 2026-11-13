@@ -1,0 +1,38 @@
+{{ $isPosts := or (eq .Section "posts") (eq .Type "posts") }}
+{{ $isTags := or (eq .Section "tags") (eq .Data.Plural "tags") (eq .Data.Singular "tag") (eq .Section "categories") (eq .Data.Plural "categories") (eq .Data.Singular "category") }}
+{{ $isSearch := eq .Section "search" }}
+
+<div class="mobile-tab-nav sticky top-0 z-30 flex justify-center pb-5 pt-1 pointer-events-none">
+  <div class="inline-flex items-center gap-1 p-1.5 bg-white/85 rounded-full backdrop-blur-xl border border-white/60 shadow-sm pointer-events-auto">
+    {{/* 1. 专栏 (Columns - 默认首屏) */}}
+    <a href="{{ "/posts/#columns" | relLangURL }}"
+       data-post-view="columns"
+       class="mobile-tab px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-bold no-underline transition-all flex items-center gap-1.5 {{ if $isPosts }}active text-white bg-brand shadow-sm{{ else }}text-secondary hover:text-brand{{ end }}">
+      <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="14" width="7" height="7" rx="1"></rect><rect x="3" y="14" width="7" height="7" rx="1"></rect></svg>
+      <span>专栏</span>
+    </a>
+
+    {{/* 2. Year (时间轴) */}}
+    <a href="{{ "/posts/#timeline" | relLangURL }}"
+       data-post-view="timeline"
+       class="mobile-tab px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-averia font-bold no-underline transition-all text-secondary hover:text-brand">
+      Year
+    </a>
+
+    <div class="w-px h-3.5 bg-black/10 mx-0.5"></div>
+
+    {{/* 3. Tags */}}
+    <a href="{{ "/tags/" | relLangURL }}"
+       aria-label="Tags"
+       class="mobile-tab px-3.5 py-1.5 rounded-full flex items-center justify-center transition-all {{ if $isTags }}active text-white bg-brand shadow-sm{{ else }}text-secondary hover:text-brand{{ end }}">
+      <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+    </a>
+
+    {{/* 4. Search */}}
+    <a href="{{ "/search/" | relLangURL }}"
+       aria-label="Search"
+       class="mobile-tab px-3.5 py-1.5 rounded-full flex items-center justify-center transition-all {{ if $isSearch }}active text-white bg-brand shadow-sm{{ else }}text-secondary hover:text-brand{{ end }}">
+      <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+    </a>
+  </div>
+</div>

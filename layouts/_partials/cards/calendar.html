@@ -6,9 +6,3 @@
   <ul id="calendar-grid" class="calendar-grid text-secondary text-sm">
   </ul>
 </div>
-
-{{ $calJs := resources.Get "js/calendar.js" }}
-{{ if $calJs }}
-{{ $calJs = $calJs | js.Build (dict "Minify" true) | resources.Fingerprint }}
-<script src="{{ $calJs.RelPermalink }}" defer></script>
-{{ end }}

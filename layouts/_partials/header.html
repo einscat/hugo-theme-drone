@@ -2,20 +2,20 @@
 {{ $currentUrl := .RelPermalink }}
 {{ $currentSection := .Section }}
 
-<header class="relative mx-auto mt-5 w-[94%] max-w-[1100px] h-[68px] z-50
+<header id="site-header" class="relative mx-auto mt-5 w-[94%] max-w-[1100px] h-[68px] z-50
                flex items-center justify-between px-2 pl-6 pr-2
                bg-card border border-white/60 rounded-full
                backdrop-blur-[12px]
                shadow-[0_40px_50px_-32px_rgba(0,0,0,0.05),inset_0_0_20px_rgba(255,255,255,0.25)]
                transition-all duration-300">
 
-    <a href="/" class="flex items-center gap-3 group no-underline text-primary shrink-0 mr-8">
+    <a href="/" class="header-logo-link flex items-center gap-3 group no-underline text-primary shrink-0 mr-8">
         <img
                 src="{{ $site.logo }}"
         alt="Logo"
         class="w-10 h-10 rounded-full object-cover shadow-sm transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6"
         />
-        <div class="flex flex-col">
+        <div class="header-site-title flex flex-col">
             <span class="font-averia text-lg font-bold tracking-wide leading-none group-hover:text-brand transition-colors">
                 {{ .Site.Title }}
             </span>
@@ -27,21 +27,22 @@
 
     <nav id="header-nav-container" class="relative flex items-center p-1">
 
-        {{/* 注意：这里移除了 opacity-0，改为默认 opacity-1，但依靠 JS 瞬间定位防止闪烁。
-        如果 JS 尚未执行，该光标会因为 width 无效而不可见，这是安全的。 */}}
+        {{/* 注意：必须带 left-0，防止在 flex 容器中静态位置偏移导致 translateX 错位 */}}
         <div id="header-cursor"
-             class="absolute top-1 bottom-1 rounded-full z-0 pointer-events-none opacity-0 transition-all duration-300 ease-[cubic-bezier(0.25,1,0.5,1)]"
+             class="absolute left-0 top-1 bottom-1 rounded-full z-0 pointer-events-none opacity-0 transition-all duration-300 ease-[cubic-bezier(0.25,1,0.5,1)]"
              style="background-image: linear-gradient(to right bottom, var(--color-border) 60%, var(--color-card) 100%);
                     box-shadow: 0 2px 10px rgba(0,0,0,0.05), inset 0 0 0 1px rgba(255,255,255,0.2);">
         </div>
 
         {{ range .Site.Menus.main }}
 
-        {{/* --- 高亮匹配逻辑 (Revised) --- */}}
+        {{/* --- 高亮匹配逻辑 (支持多路由聚合) --- */}}
+        {{ $cleanCurrent := strings.TrimSuffix "/" $currentUrl }}
+        {{ $cleanMenuUrl := strings.TrimSuffix "/" .URL }}
 
         {{/* 1. 基础匹配 */}}
-        {{ $isExact := eq $currentUrl .URL }}
-        {{ $isPrefix := and (ne .URL "/") (hasPrefix $currentUrl .URL) }}
+        {{ $isExact := or (eq $currentUrl .URL) (eq $cleanCurrent $cleanMenuUrl) }}
+        {{ $isPrefix := and (ne $cleanMenuUrl "") (hasPrefix $cleanCurrent $cleanMenuUrl) }}
 
         {{/* 2. Section 匹配 */}}
         {{ $isSectionMatch := false }}
@@ -52,14 +53,13 @@
         {{ end }}
         {{ end }}
 
-        {{/* 3. 聚合高亮 (博客内容聚合到 Posts) */}}
-        {{ $isBlogContext := false }}
-        {{ if or (eq $currentSection "posts") (eq $currentSection "categories") (eq $currentSection "tags") (in $currentUrl "search") }}
-        {{ $isBlogContext = true }}
-        {{ end }}
+        {{/* 3. 聚合高亮 (博客内容聚合到 Posts，行知路与悦读聚合到 Journey) */}}
+        {{ $isBlogContext := or (eq $currentSection "posts") (eq $currentSection "categories") (eq $currentSection "tags") (hasPrefix $cleanCurrent "/posts") (hasPrefix $cleanCurrent "/tags") (hasPrefix $cleanCurrent "/categories") (hasPrefix $cleanCurrent "/search") }}
+        {{ $isJourneyContext := or (eq $currentSection "journey") (eq $currentSection "reading") (hasPrefix $cleanCurrent "/journey") (hasPrefix $cleanCurrent "/reading") }}
 
         {{ $isPostsMenu := in .URL "/posts" }}
-        {{ $isAggregated := and $isPostsMenu $isBlogContext }}
+        {{ $isJourneyMenu := in .URL "/journey" }}
+        {{ $isAggregated := or (and $isPostsMenu $isBlogContext) (and $isJourneyMenu $isJourneyContext) }}
 
         {{ $isActive := or $isExact $isPrefix $isSectionMatch $isAggregated }}
 
@@ -88,106 +88,3 @@
         {{ end }}
     </nav>
 </header>
-
-<script>
-    (function() {
-        const navContainer = document.getElementById('header-nav-container');
-        const cursor = document.getElementById('header-cursor');
-        const items = document.querySelectorAll('.header-nav-item');
-
-        if (!navContainer || !cursor || items.length === 0) return;
-
-        let activeItem = null;
-
-        // 找到当前激活项
-        items.forEach(item => {
-            if (item.getAttribute('data-active') === 'true') {
-                activeItem = item;
-            }
-        });
-
-        // --- 核心修改：瞬时定位逻辑 ---
-        if (activeItem) {
-            // 1. 暂时禁用过渡动画，防止光标从零位置滑过来
-            cursor.style.transition = 'none';
-            cursor.style.opacity = '1';
-
-            // 2. 计算并应用位置
-            const left = activeItem.offsetLeft;
-            const width = activeItem.offsetWidth;
-            cursor.style.width = `${width}px`;
-            cursor.style.transform = `translateX(${left}px)`;
-
-            // 3. 强制浏览器回流 (Reflow)，确保 transition='none' 立即生效
-            void cursor.offsetWidth;
-
-            // 4. 恢复 CSS 定义的过渡效果 (清理 inline style，回退到 CSS 类)
-            // 使用极短的 timeout 确保下一帧才恢复动画
-            setTimeout(() => {
-                cursor.style.transition = '';
-            }, 10);
-        }
-
-        // 常规移动函数 (带动画)
-        function moveCursorTo(item) {
-            if (!item) {
-                cursor.style.opacity = '0';
-                return;
-            }
-            const left = item.offsetLeft;
-            const width = item.offsetWidth;
-            cursor.style.width = `${width}px`;
-            cursor.style.transform = `translateX(${left}px)`;
-            cursor.style.opacity = '1';
-        }
-
-        function updateVisuals(hoverItem) {
-            items.forEach(item => {
-                const isHovered = item === hoverItem;
-                const isActiveOriginal = item === activeItem;
-
-                // 仅在 hover 状态变化时操作 JS 样式
-                // 注意：默认的 active 状态现在已经通过服务器端 CSS 类渲染好了，所以这里主要处理 hover 带来的变化
-
-                const outline = item.querySelector('.header-icon-outline');
-                const filled = item.querySelector('.header-icon-filled');
-                const text = item.querySelector('.header-nav-text');
-
-                const showActiveState = isHovered || (!hoverItem && isActiveOriginal);
-
-                if (showActiveState) {
-                    if(outline) outline.style.opacity = '0';
-                    if(filled) filled.style.opacity = '1';
-                    if(text) {
-                        text.style.color = 'var(--color-primary, #4E3F42)';
-                        text.style.fontWeight = '700';
-                    }
-                } else {
-                    if(outline) outline.style.opacity = '0.7';
-                    if(filled) filled.style.opacity = '0';
-                    if(text) {
-                        text.style.color = '';
-                        text.style.fontWeight = '500';
-                    }
-                }
-            });
-        }
-
-        // 事件监听
-        items.forEach(item => {
-            item.addEventListener('mouseenter', () => {
-                moveCursorTo(item);
-                updateVisuals(item);
-            });
-            item.addEventListener('click', () => {
-                activeItem = item;
-                moveCursorTo(item);
-            });
-        });
-
-        navContainer.addEventListener('mouseleave', () => {
-            moveCursorTo(activeItem);
-            updateVisuals(null);
-        });
-    })();
-</script>

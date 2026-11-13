@@ -1,12 +1,12 @@
 {{ define "main" }}
 
-<div class="h-screen w-full bg-bg flex flex-col overflow-hidden">
+<div class="h-screen w-full bg-bg flex flex-col overflow-hidden" data-pjax-shell="projects">
 
-  <div class="flex-none z-50 py-4 w-full relative">
+  <div class="flex-none z-50 py-4 w-full relative" data-pjax-header>
     {{ partial "header.html" . }}
   </div>
 
-  <div class="flex-1 w-full flex flex-col overflow-hidden">
+  <div class="flex-1 w-full flex flex-col overflow-hidden" data-pjax-body>
 
     <div class="flex-none z-40 w-full flex justify-center bg-bg/95 backdrop-blur-sm">
       <div class="w-full max-w-5xl px-4 sm:px-8 layout-fixed-header">
@@ -47,7 +47,7 @@
 
     <div class="flex-1 w-full overflow-y-auto no-scrollbar scroll-smooth">
 
-      <div class="w-full max-w-5xl mx-auto px-4 sm:px-8 pt-4 pb-24">
+      <div class="w-full max-w-5xl mx-auto px-4 sm:px-8 pt-2 sm:pt-4 pb-24">
 
         <article class="layout-content mx-auto animate-fade-in-up">
           {{ .Content }}
@@ -60,32 +60,59 @@
           <div class="project-card">
 
             <div class="project-header">
+              {{ if .image }}
               <img src="{{ .image }}" alt="{{ .name }}" class="project-icon">
+              {{ end }}
 
               <div class="project-info">
                 <div class="project-title-row">
                   <h3 class="project-title">{{ .name }}</h3>
+                  {{ if .type }}
+                  <span class="project-type-badge">{{ .type }}</span>
+                  {{ end }}
+                  {{ if .status }}
+                  <span class="project-status-badge">
+                    <span class="project-status-dot"></span>
+                    {{ .status }}
+                  </span>
+                  {{ end }}
+                  {{ if .year }}
                   <span class="project-year">{{ .year }}</span>
+                  {{ end }}
                 </div>
+                {{ if .tags }}
                 <div class="project-tags">
                   {{ range .tags }}
                   <span class="project-tag">{{ . }}</span>
                   {{ end }}
                 </div>
+                {{ end }}
               </div>
             </div>
 
+            {{ if .description }}
             <p class="project-desc">{{ .description }}</p>
+            {{ end }}
 
             <div class="project-actions">
+              {{ if .qrcode }}
+              <button type="button"
+                      class="project-btn project-btn-primary cursor-pointer"
+                      data-open-qrcode="{{ .qrcode }}"
+                      data-project-name="{{ .name }}"
+                      data-project-desc="{{ .description }}">
+                <svg class="w-4 h-4 mr-1.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="3" width="7" height="7" rx="1"></rect><rect x="3" y="14" width="7" height="7" rx="1"></rect><path d="M14 14h3v3h-3z"></path><path d="M17 17h4v4h-4z"></path><path d="M14 19h2v2h-2z"></path><path d="M19 14h2v2h-2z"></path></svg>
+                <span>扫码体验小程序</span>
+              </button>
+              {{ end }}
               {{ if .url }}
-              <a href="{{ .url }}" target="_blank" class="project-btn">Website</a>
+              <a href="{{ .url }}" target="_blank" rel="noopener noreferrer" class="project-btn">Website</a>
               {{ end }}
               {{ if .github }}
-              <a href="{{ .github }}" target="_blank" class="project-btn">GitHub</a>
+              <a href="{{ .github }}" target="_blank" rel="noopener noreferrer" class="project-btn">GitHub</a>
               {{ end }}
               {{ if .npm }}
-              <a href="{{ .npm }}" target="_blank" class="project-btn">NPM</a>
+              <a href="{{ .npm }}" target="_blank" rel="noopener noreferrer" class="project-btn">NPM</a>
               {{ end }}
             </div>
 
@@ -98,6 +125,27 @@
 
     </div>
 
+  </div>
+</div>
+
+{{/* 小程序码预览弹窗 */}}
+<div id="project-qrcode-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/40 backdrop-blur-xs">
+  <div class="bg-white/95 backdrop-blur-xl border border-white rounded-3xl p-6 w-full max-w-xs shadow-2xl flex flex-col items-center text-center relative animate-fade-in-up">
+    <button type="button" id="project-qrcode-close" aria-label="Close" class="absolute right-4 top-4 w-8 h-8 rounded-full bg-black/5 hover:bg-brand hover:text-white text-secondary flex items-center justify-center transition-colors cursor-pointer border-0">
+      <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    </button>
+
+    <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-[#07c160]/10 text-[#07c160] mb-2">微信小程序</span>
+    <h3 id="modal-project-name" class="text-lg font-bold text-primary m-0"></h3>
+    <p id="modal-project-desc" class="text-xs text-secondary mt-1 mb-4 line-clamp-2"></p>
+
+    <div class="w-48 h-48 rounded-2xl bg-white p-3 border border-black/5 shadow-inner flex items-center justify-center">
+      <img id="modal-project-qrcode" src="" alt="小程序码" class="w-full h-full object-contain rounded-lg" />
+    </div>
+
+    <p class="text-xs text-secondary/80 mt-4 mb-0">
+      手机端可长按图片识别 · 电脑端请使用微信扫一扫
+    </p>
   </div>
 </div>
 {{ end }}

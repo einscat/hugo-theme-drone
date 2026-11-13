@@ -1,10 +1,8 @@
-{{/* 左侧导航：使用 href 跳转实现路由分离 */}}
+{{/* 左侧导航：支持专栏、时间轴、标签、搜索四视图 */}}
 
-{{/* 判断当前高亮状态 */}}
 {{ $isDeepPage := .IsPage }}
 {{ $isPosts := or (eq .Section "posts") (eq .Type "posts") }}
-{{ $isCategories := or (eq .Section "categories") (eq .Data.Plural "categories") (eq .Data.Singular "category") }}
-{{ $isTags := or (eq .Section "tags") (eq .Data.Plural "tags") (eq .Data.Singular "tag") }}
+{{ $isTags := or (eq .Section "tags") (eq .Data.Plural "tags") (eq .Data.Singular "tag") (eq .Section "categories") (eq .Data.Plural "categories") (eq .Data.Singular "category") }}
 {{ $isSearch := eq .Section "search" }}
 
 <div class="left-tab-nav">
@@ -13,13 +11,13 @@
           shadow-[0_8px_30px_rgba(0,0,0,0.04)] transition-all relative pointer-events-auto">
 
         {{ if $isDeepPage }}
-        {{/* 详情页/具体分类页：显示返回按钮 */}}
+        {{/* 详情页：显示返回按钮 */}}
         {{ $backUrl := "/posts/" | relLangURL }}
         {{ with .Parent }}
             {{ $backUrl = .RelPermalink }}
         {{ end }}
         <a href="{{ $backUrl }}"
-           onclick="if(history.length > 1 && document.referrer.includes(window.location.host)) { history.back(); return false; }"
+           data-pjax-back="true"
         class="side-tab group relative z-10 w-11 h-11 flex items-center justify-center
         text-secondary rounded-full transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)]
         hover:text-brand hover:bg-brand/10 hover:scale-110 hover:shadow-sm"
@@ -31,36 +29,38 @@
         </a>
 
         {{ else }}
-        {{/* 列表页/总览页：显示导航链接 */}}
+        {{/* 列表页/总览页：显示 4 个导航项 */}}
 
-        {{/* 1. Year -> 跳转 /posts/ (使用 list.html) */}}
-        <a href="{{ "/posts/" | relLangURL }}"
-        class="side-tab {{ if $isPosts }}active{{ end }} group relative z-10 w-11 h-11 flex items-center justify-center text-secondary rounded-full transition-all duration-300 hover:text-brand"
-        title="Year">
-        <span class="font-averia font-bold text-sm">Year</span>
+        {{/* 1. 专栏 (Columns - 默认首屏) */}}
+        <a href="{{ "/posts/#columns" | relLangURL }}"
+           data-post-view="columns"
+           class="side-tab {{ if $isPosts }}active{{ end }} group relative z-10 w-11 h-11 flex items-center justify-center text-secondary rounded-full transition-all duration-300 hover:text-brand"
+           title="专栏">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="14" width="7" height="7" rx="1"></rect><rect x="3" y="14" width="7" height="7" rx="1"></rect></svg>
         </a>
 
-        <div class="w-6 h-px bg-black/5 my-1"></div>
+        <div class="w-6 h-px bg-black/5 my-0.5"></div>
 
-        {{/* 2. Tags -> 跳转 /tags/ (使用 terms.html) */}}
+        {{/* 2. Year (时间轴视图) */}}
+        <a href="{{ "/posts/#timeline" | relLangURL }}"
+           data-post-view="timeline"
+           class="side-tab group relative z-10 w-11 h-11 flex items-center justify-center text-secondary rounded-full transition-all duration-300 hover:text-brand"
+           title="Year">
+          <span class="font-averia font-bold text-sm">Year</span>
+        </a>
+
+        {{/* 3. Tags -> 跳转 /tags/ */}}
         <a href="{{ "/tags/" | relLangURL }}"
-        class="side-tab {{ if $isTags }}active{{ end }} group relative z-10 w-11 h-11 flex items-center justify-center text-secondary rounded-full transition-all duration-300 hover:text-brand"
-        title="Tags">
-        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+           class="side-tab {{ if $isTags }}active{{ end }} group relative z-10 w-11 h-11 flex items-center justify-center text-secondary rounded-full transition-all duration-300 hover:text-brand"
+           title="Tags">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
         </a>
 
-        {{/* 3. Categories -> 跳转 /categories/ (使用 terms.html) */}}
-        <a href="{{ "/categories/" | relLangURL }}"
-        class="side-tab {{ if $isCategories }}active{{ end }} group relative z-10 w-11 h-11 flex items-center justify-center text-secondary rounded-full transition-all duration-300 hover:text-brand"
-        title="Categories">
-        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-        </a>
-
-        {{/* 4. Search */}}
+        {{/* 4. Search -> 跳转 /search/ */}}
         <a href="{{ "/search/" | relLangURL }}"
-        class="side-tab {{ if $isSearch }}active{{ end }} group relative z-10 w-11 h-11 flex items-center justify-center text-secondary rounded-full transition-all duration-300 hover:text-brand"
-        title="Search">
-        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+           class="side-tab {{ if $isSearch }}active{{ end }} group relative z-10 w-11 h-11 flex items-center justify-center text-secondary rounded-full transition-all duration-300 hover:text-brand"
+           title="Search">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
         </a>
 
         {{/* 游标跟随 */}}

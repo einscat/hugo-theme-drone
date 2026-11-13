@@ -1,70 +1,102 @@
 {{ define "main" }}
+{{ $currentURL := .RelPermalink }}
+{{ $currentClean := strings.TrimSuffix "/" $currentURL }}
 
-<div class="h-screen w-full bg-bg flex flex-col overflow-hidden">
+{{/* 判断当前是否为书架主页 (/reading/mine/)，否则为某本书的读后感笔记详情页 */}}
+{{ $isBookshelfPage := or (eq $currentClean "/reading/mine") (eq $currentClean "/reading") }}
 
-  <div class="flex-none z-50 py-4 w-full relative">
+<div class="h-screen w-full bg-bg flex flex-col overflow-hidden" data-pjax-shell="reading">
+
+  {{/* 1. 顶部全局 Header */}}
+  <div class="flex-none z-50 py-4 w-full relative" data-pjax-header>
     {{ partial "header.html" . }}
   </div>
 
-  <div class="flex-1 w-full flex flex-col items-center overflow-hidden">
+  {{/* 2. 读书笔记详情页：左侧显示与「笔记」完全一致的圆形返回书架按钮 */}}
+  {{ if not $isBookshelfPage }}
+  <div class="left-tab-nav">
+    <aside class="flex flex-col items-center gap-2 p-2 rounded-full
+          bg-white/60 border border-white/60 backdrop-blur-xl
+          shadow-[0_8px_30px_rgba(0,0,0,0.04)] transition-all relative pointer-events-auto">
+      <a href="{{ "/reading/mine/" | relLangURL }}"
+         data-pjax-back="true"
+         class="side-tab group relative z-10 w-11 h-11 flex items-center justify-center
+                text-secondary rounded-full transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)]
+                hover:text-brand hover:bg-brand/10 hover:scale-110 hover:shadow-sm"
+         title="返回书架">
+        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+      </a>
+    </aside>
+  </div>
+  {{ end }}
 
-    <div class="w-full max-w-5xl h-full flex flex-col px-4 sm:px-8">
+  {{/* 3. 主体区域（与行知路、笔记列表/详情页 100% 统一宽度） */}}
+  <div class="flex-1 w-full flex flex-col overflow-hidden" data-pjax-body data-subnav-group="journey">
 
-      <div class="flex-none z-40 reading-fixed-header">
+    <div class="flex-none z-40 w-full flex justify-center bg-bg/95 backdrop-blur-sm">
+      <div class="list-container mx-auto px-4 sm:px-8 layout-fixed-header">
 
-        {{ if .Params.reading_nav }}
-        <nav class="reading-sub-nav">
-          {{ $currentURL := .RelPermalink }}
-          {{ range $index, $item := .Params.reading_nav }}
-
-          {{/* 分隔点 (第一个元素前不加) */}}
-          {{ if ne $index 0 }}<span class="separator">·</span>{{ end }}
-
-          {{/* 简单的当前页匹配高亮 */}}
-          {{ $isActive := eq $currentURL $item.url }}
-          <a href="{{ $item.url }}" class="{{ if $isActive }}active{{ end }}">
-            {{ $item.title }}
+        {{/* 行知路统一 4 大主导航：一念 · 悦❤️读 · 画意 · 幕语 */}}
+        {{ $journeyTabs := slice
+          (dict "title" "一念" "url" "/journey/moments/")
+          (dict "title" "悦❤️读" "url" "/reading/mine/")
+          (dict "title" "画意" "url" "/journey/photos/")
+          (dict "title" "幕语" "url" "/journey/videos/")
+        }}
+        <nav class="layout-sub-nav">
+          {{ range $journeyTabs }}
+          {{ $isReadingTab := in .url "/reading" }}
+          <a href="{{ .url }}" class="{{ if $isReadingTab }}active{{ end }}">
+            {{ .title }}
           </a>
           {{ end }}
         </nav>
-        {{ end }}
 
-        <hr class="reading-divider">
+        <hr class="layout-divider">
 
         {{ if .Params.quote }}
-        <blockquote class="reading-quote">
+        <blockquote class="layout-quote">
           {{ .Params.quote }}
         </blockquote>
         {{ end }}
 
       </div>
+    </div>
 
-      <div class="flex-1 w-full overflow-y-auto no-scrollbar scroll-smooth">
-        <article class="reading-content mx-auto animate-fade-in-up reading-scroll-area
-                       prose max-w-none
-                       prose-headings:font-bold prose-headings:text-[var(--color-primary)]
-                       prose-p:text-[var(--color-primary)] prose-p:opacity-90
-                       prose-a:text-[var(--color-brand)] hover:prose-a:underline
-                       prose-strong:text-[var(--color-primary)]
-                       prose-blockquote:border-l-4 prose-blockquote:border-[var(--color-brand)] prose-blockquote:text-[var(--color-primary)]
-                       prose-img:rounded-xl prose-img:shadow-md">
+    <div class="flex-1 w-full overflow-y-auto no-scrollbar scroll-smooth" id="scroll-container">
+      <div class="list-container mx-auto px-4 sm:px-8">
+        {{ if $isBookshelfPage }}
+        {{/* 纯书架视图：一页直观陈列全部书籍 */}}
+        <div class="reading-catalog-area animate-fade-in-up">
           {{ .Content }}
-        </article>
+        </div>
+        {{ else }}
+        {{/* 读书笔记详情视图：与「笔记」详情页统一使用磨砂大卡片 + 右侧目录导航 */}}
+        <main class="article-main pt-3">
+          <article class="article-card animate-fade-in-up">
+            <div class="layout-content reading-content prose prose-slate max-w-none
+                        prose-headings:font-bold prose-headings:tracking-tight
+                        prose-h2:mt-8 prose-h2:mb-4 prose-h2:text-2xl prose-h2:text-primary
+                        prose-h3:text-xl
+                        prose-a:text-[var(--color-brand)] prose-a:no-underline hover:prose-a:underline
+                        prose-img:rounded-xl prose-img:shadow-md
+                        prose-code:text-[var(--color-brand)] prose-code:bg-brand/10 prose-code:px-1 prose-code:rounded">
+              {{ .Content }}
+            </div>
+          </article>
+        </main>
+        {{ partial "posts/right-toc-nav.html" . }}
+        {{ end }}
 
         <div class="h-24"></div>
       </div>
-
     </div>
+
   </div>
+
 </div>
 
-<style>
-  .animate-fade-in-up {
-    animation: fadeInUp 0.5s ease-out forwards;
-  }
-  @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-</style>
 {{ end }}
