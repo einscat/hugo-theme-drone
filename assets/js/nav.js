@@ -9,15 +9,23 @@
         // 默认选中的索引 (0 = 列表第一个)
         // 如果想默认不选中任何项，可以将 opacity 设为 0，并修改此处逻辑
         const defaultIndex = 0;
+        let currentIndex = defaultIndex;
 
         function updateState(targetIndex) {
             const targetItem = items[targetIndex];
             if (!targetItem) return;
 
-            // 1. 计算偏移量并移动光标
-            // 使用 offsetTop 获取该项在容器内的相对位置
+            currentIndex = targetIndex;
+
+            // 1. 计算偏移量与尺寸并移动光标（同时兼容桌面端单列与移动端双列宫格）
+            const left = targetItem.offsetLeft;
             const top = targetItem.offsetTop;
-            cursor.style.transform = `translateY(${top}px)`;
+            const width = targetItem.offsetWidth;
+            const height = targetItem.offsetHeight;
+
+            cursor.style.width = `${width}px`;
+            cursor.style.height = `${height}px`;
+            cursor.style.transform = `translate(${left}px, ${top}px)`;
             cursor.style.opacity = '1';
 
             // 2. 切换 active 类 (用于控制图标填充和文字颜色)
@@ -34,6 +42,10 @@
         setTimeout(() => {
             updateState(defaultIndex);
         }, 100);
+
+        window.addEventListener('resize', () => {
+            updateState(currentIndex);
+        });
 
         // 鼠标移入：跟随
         items.forEach((item, index) => {

@@ -1,6 +1,6 @@
 {{ define "main" }}
-<div class="relative w-full h-screen overflow-hidden bg-bg">
-  <div class="absolute left-1/2 top-1/2 z-10 w-0 h-0">
+<div class="home-page relative w-full h-screen overflow-hidden bg-bg">
+  <div class="home-stage absolute left-1/2 top-1/2 z-10 w-0 h-0">
 
     {{ partial "cards/hi.html" . }}
     {{ partial "cards/clock.html" . }}
@@ -11,7 +11,7 @@
   </div>
 
   {{ if .Site.Params.icp }}
-  <div class="absolute bottom-4 w-full text-center z-20 pointer-events-none">
+  <div class="home-icp absolute bottom-4 w-full text-center z-20 pointer-events-none">
     <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer" class="pointer-events-auto text-xs font-sans text-secondary/60 hover:text-brand transition-colors no-underline">
       {{ .Site.Params.icp }}
     </a>

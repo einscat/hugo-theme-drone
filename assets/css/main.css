@@ -262,6 +262,132 @@
 }
 
 /* =========================================
+   首页移动端与窄屏响应式适配 (Home Responsive)
+   桌面端三列绝对定位总跨度约 1050px (-496px ~ +554px)
+   视口小于 1080px 时切换为纵向流式滚动布局
+   ========================================= */
+@media (max-width: 1079px) {
+  .home-page {
+    height: auto !important;
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 20px 16px 28px;
+    box-sizing: border-box;
+  }
+
+  .home-stage {
+    position: relative !important;
+    left: auto !important;
+    top: auto !important;
+    width: 100% !important;
+    max-width: 440px;
+    height: auto !important;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .home-stage > .card {
+    position: relative !important;
+    left: auto !important;
+    top: auto !important;
+    width: 100% !important;
+    border-radius: 28px;
+    box-sizing: border-box;
+  }
+
+  /* 1. 个人名片卡片 */
+  .card-hi {
+    order: 1;
+    height: auto;
+    min-height: 220px;
+    padding: 24px 20px;
+    animation-delay: 0.05s;
+  }
+
+  /* 2. 导航菜单卡片（紧凑 2 列宫格） */
+  .card-nav {
+    order: 2;
+    height: auto;
+    padding: 14px;
+    animation-delay: 0.12s;
+  }
+
+  .card-nav #nav-container {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .card-nav .nav-item {
+    height: 48px;
+    padding: 0 14px;
+    border-radius: 16px;
+    background-color: rgba(255, 255, 255, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.65);
+  }
+
+  .card-nav .nav-cursor {
+    border-radius: 16px;
+  }
+
+  /* 3. 插画/照片入口卡片 */
+  .card-moments {
+    order: 3;
+    height: 184px;
+    padding: 0.5rem;
+    animation-delay: 0.2s;
+  }
+
+  .card-moments > div {
+    border-radius: 20px;
+  }
+
+  /* 4. 数字时钟卡片 */
+  .card-clock {
+    order: 4;
+    height: 104px;
+    padding: 0.5rem;
+    animation-delay: 0.28s;
+  }
+
+  .card-clock > div {
+    border-radius: 20px;
+  }
+
+  /* 5. 日历卡片 */
+  .card-calendar {
+    order: 5;
+    height: auto;
+    min-height: 268px;
+    padding: 16px;
+    animation-delay: 0.35s;
+  }
+
+  .card-calendar .calendar-grid {
+    gap: 6px;
+  }
+
+  .card-calendar .calendar-cell {
+    min-height: 32px;
+  }
+
+  /* 底部备案号跟随流式文档底部 */
+  .home-icp {
+    position: relative !important;
+    bottom: auto !important;
+    margin-top: 20px;
+    padding-bottom: 4px;
+  }
+}
+
+/* =========================================
    Header 导航样式
    ========================================= */
 
